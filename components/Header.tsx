@@ -13,14 +13,11 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
     padding: 10,
-    backgroundColor: "orange",
   },
   headerText: {
-    alignItems: "center",
-    fontSize: 20,
+    fontSize: 25,
+    fontWeight: "bold",
   },
 });
