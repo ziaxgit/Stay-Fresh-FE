@@ -2,15 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../Header";
-import NavBar from "../NavBar";
 
-const Home = ({ navigation }) => {
-  return (
-    <>
-      <Header />
-      <NavBar />
-    </>
-  );
+const Home = () => {
+  return <Header />;
 };
 
 export default Home;

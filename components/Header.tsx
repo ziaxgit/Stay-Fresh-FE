@@ -3,11 +3,9 @@ import React from "react";
 
 const Header = () => {
   return (
-    <>
-      <View>
-        <Text style={styles.header}>Stay Fresh, Stay Happy!</Text>
-      </View>
-    </>
+    <View>
+      <Text style={styles.header}>StayFresh</Text>
+    </View>
   );
 };
 
@@ -15,8 +13,12 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
+    flex: 1,
     fontSize: 20,
     padding: 23,
-    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
 });
