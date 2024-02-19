@@ -1,17 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import Header from "../Header";
+import NavBar from "../NavBar";
 
-const Header = () => {
+const Home = ({ navigation }) => {
   return (
     <>
-      <View>
-        <Text style={styles.header}>Stay Fresh, Stay Happy!</Text>
-      </View>
+      <Header />
+      <NavBar />
     </>
   );
 };
 
-export default Header;
+export default Home;
 
 const styles = StyleSheet.create({
   header: {
