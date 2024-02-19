@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Stay-Fresh-FE",
-    "slug": "Stay-Fresh-FE",
+    "slug": "stay-fresh-fe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2563ce96-6798-4ecc-991a-81215532da26"
+      }
+    },
+    "owner": "the-404s"
   }
 }
