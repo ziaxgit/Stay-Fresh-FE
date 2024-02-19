@@ -1,7 +1,6 @@
 import { StyleSheet, Button, Text, View } from "react-native";
 import React from "react";
 import PantryList from "./PantryList";
-import itemsData from "./ItemsData.json";
 
 const ListContainer = () => {
   return (

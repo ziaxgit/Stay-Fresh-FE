@@ -1,5 +1,5 @@
 {
-  "groceryItems": {[
+  "groceryItems": [
     { "name": "Milk", "expiryDate": "2024-03-01" },
     { "name": "Bread", "expiryDate": "2024-02-25" },
     { "name": "Eggs", "expiryDate": "2024-03-05" },
@@ -20,5 +20,5 @@
     { "name": "Salmon", "expiryDate": "2024-03-14" },
     { "name": "Potatoes", "expiryDate": "2024-03-30" },
     { "name": "Onions", "expiryDate": "2024-03-04" }
-  ]}
+  ]
 }
