@@ -3,6 +3,9 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../Header";
 import NavBar from "../NavBar";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+const Tab = createBottomTabNavigator();
 
 const Home = ({ navigation }) => {
   return (
