@@ -1,11 +1,16 @@
 import { StyleSheet, Button, Text, View } from "react-native";
 import React from "react";
 import PantryList from "./PantryList";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+type RootStackParamList = { AddItem: undefined };
 const ListContainer = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Button title="Add Items" />
+      <Button title="Add Item" onPress={() => navigation.navigate("AddItem")} />
       <Text style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}>
         Your current items
       </Text>
