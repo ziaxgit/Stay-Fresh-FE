@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import HomeNavigation from "./HomeNavigation";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import App from "../../App";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,12 +23,13 @@ export default function TabNavigation() {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="home"
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" color={color} size={28} />
           ),
+          unmountOnBlur: true,
         }}
         component={HomeNavigation}
       />
