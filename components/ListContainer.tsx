@@ -1,11 +1,18 @@
 import { StyleSheet, Button, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "./PantryList";
+import itemsData from "./ItemsData.json";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-type RootStackParamList = { Home: undefined; AddItem: undefined };
+import { useState } from "react";
+type RootStackParamList = {
+  Home: undefined;
+  AddItem: object;
+};
 const ListContainer = () => {
+  const [currentList, setCurrentList] = useState<Object>(
+    itemsData.groceryItems
+  );
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
@@ -13,7 +20,10 @@ const ListContainer = () => {
       <Button
         title="Add Item"
         onPress={() => {
-          navigation.navigate("AddItem");
+          navigation.navigate("AddItem", {
+            list: currentList,
+            setList: setCurrentList,
+          });
         }}
       />
       <Text style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}>
@@ -37,7 +47,7 @@ const ListContainer = () => {
           Expires in
         </Text>
       </View>
-      <PantryList />
+      <PantryList currentList={currentList} />
     </View>
   );
 };
