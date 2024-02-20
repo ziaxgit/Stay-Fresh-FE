@@ -23,7 +23,7 @@ export default function TabNavigation() {
       }}
     >
       <Tab.Screen
-        name="home"
+        name="Home-main"
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (

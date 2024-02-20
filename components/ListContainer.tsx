@@ -10,9 +10,7 @@ type RootStackParamList = {
   AddItem: object;
 };
 const ListContainer = () => {
-  const [currentList, setCurrentList] = useState<Object>(
-    itemsData.groceryItems
-  );
+  const [currentList, setCurrentList] = useState(itemsData.groceryItems);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
@@ -21,8 +19,8 @@ const ListContainer = () => {
         title="Add Item"
         onPress={() => {
           navigation.navigate("AddItem", {
-            list: currentList,
-            setList: setCurrentList,
+            currentList,
+            setCurrentList,
           });
         }}
       />

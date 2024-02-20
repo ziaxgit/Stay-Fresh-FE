@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useNavigation } from "@react-navigation/native";
 
 const AddItem = ({ route }: any) => {
-  const { list, setList } = route.params;
-
+  const { currentList, setCurrentList } = route.params;
+  const navigation = useNavigation();
   const [itemName, setItemName] = useState("");
-  // const [itemExpiry, setItemExpiry] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [newItem, setNewItem] = useState<Object>({});
+  const [expiryDate, setExpiryDate] = useState(new Date());
 
-  const onChangeDate = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate;
-    setDate(currentDate || new Date());
+  const onChangeDate = (event: any, selectedDate: any) => {
+    setExpiryDate(selectedDate);
   };
 
   const addToList = () => {
-    setNewItem({ name: itemName, expiryDate: date });
-    console.log(newItem);
-    setList((currentList: any[]) => {
-      return [newItem, ...currentList];
-    });
+    const currentDate = new Date();
+    const differenceInMilliseconds =
+      expiryDate.getTime() - currentDate.getTime();
+
+    const differenceInDays = Math.floor(
+      differenceInMilliseconds / (1000 * 60 * 60 * 24)
+    );
+    const itemToAdd = {
+      name: itemName,
+      expiryDate: differenceInDays + 1,
+    };
+    console.log(itemToAdd);
+    setCurrentList([...currentList, itemToAdd]);
+
+    navigation.navigate("Home");
   };
 
   return (
@@ -38,22 +46,15 @@ const AddItem = ({ route }: any) => {
         />
         <Text className="text-xl mb-1 font-medium">Expiry date</Text>
         <View className="flex flex-row items-start bg-slate-100 rounded-md">
-          {/* <TextInput
-            className="py-3 px-2 bg-slate-200 rounded-md mb-4"
-            onChangeText={setItemExpiry}
-            value={itemExpiry}
-            placeholder="Select expiry date"
-          /> */}
           <DateTimePicker
             testID="dateTimePicker"
-            value={date}
-            // is24Hour={true}
+            value={expiryDate}
             onChange={onChangeDate}
             display="spinner"
           />
         </View>
       </View>
-      {<Text>selected: {date.toISOString().split("T")[0]}</Text>}
+      {}
       <View className="flex-row justify-center">
         <TouchableOpacity
           className="w-2/6 mt-8 items-center overflow-hidden"
