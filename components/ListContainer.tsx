@@ -8,15 +8,6 @@ type RootStackParamList = { Home: undefined; AddItem: undefined };
 const ListContainer = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const unsubscribe = navigation.addListener("focus", () => {
-  //       navigation.navigate("Home");
-  //     });
-  //     return unsubscribe;
-  //   }, [navigation])
-  //);
-
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <Button
