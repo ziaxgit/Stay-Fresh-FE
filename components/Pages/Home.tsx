@@ -11,11 +11,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 20,
-    padding: 23,
-    flex: 1,
-  },
-});

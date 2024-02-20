@@ -12,45 +12,55 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <NavigationContainer>
         <Header />
-      </SafeAreaView>
-      <Tab.Navigator
-        screenOptions={{ headerShown: false, tabBarShowLabel: true }}
-      >
-        <Tab.Screen
-          name="Home"
-          options={{
-            tabBarLabel: "Home",
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home" color={color} size={size} />
-            ),
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: true,
+            tabBarStyle: {
+              padding: 10,
+            },
           }}
-          component={Home}
-        />
-        <Tab.Screen
-          name="Scan"
-          options={{
-            tabBarLabel: "Scan",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="document-scanner" color={color} size={24} />
-            ),
-          }}
-          component={Scan}
-        />
-        <Tab.Screen
-          name="Profile"
-          options={{
-            tabBarLabel: "Profile",
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="user" size={24} color={color} />
-            ),
-          }}
-          component={Profile}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+        >
+          <Tab.Screen
+            name="Home"
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="home" color={color} size={28} />
+              ),
+            }}
+            component={Home}
+          />
+          <Tab.Screen
+            name="Scan"
+            options={{
+              tabBarLabel: "Scan",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons
+                  name="document-scanner"
+                  color={color}
+                  size={28}
+                />
+              ),
+            }}
+            component={Scan}
+          />
+          <Tab.Screen
+            name="Profile"
+            options={{
+              tabBarLabel: "Profile",
+              tabBarIcon: ({ color }) => (
+                <FontAwesome name="user" color={color} size={28} />
+              ),
+            }}
+            component={Profile}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
@@ -58,7 +68,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
