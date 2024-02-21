@@ -3,16 +3,23 @@ import { Button, Image, View } from "react-native";
 import * as Camera from "expo-image-picker";
 
 export default function Scan() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
 
   const takePicture = async () => {
     try {
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
+      if (cameraStatus.status !== "granted") {
+        alert("Sorry, we need camera permissions to make this work!");
+      }
+
       let result = await Camera.launchCameraAsync({
         mediaTypes: Camera.MediaTypeOptions.Images,
         allowsEditing: false, // Disable cropping
         quality: 1,
       });
-      setImage(result.assets[0].uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
     } catch (error) {
       console.error("Error capturing image:", error);
     }
@@ -24,7 +31,9 @@ export default function Scan() {
       allowsEditing: false, // Disable cropping
       quality: 1,
     });
-    setImage(result.assets[0].uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
   return (
