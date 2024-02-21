@@ -1,31 +1,26 @@
 import React, { useState } from "react";
 import { Button, Image, View } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import * as Camera from "expo-image-picker";
 
 export default function Scan() {
   const [image, setImage] = useState(null);
 
   const takePicture = async () => {
-    const [status, requestPermission] = ImagePicker.useCameraPermissions();
-
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false, // Disable cropping
-      quality: 1,
-    });
-
-    console.log(result, "<<<< RESULT"); // Log the result to see its structure
-    console.log("====================================");
-    console.log("test log");
-    setImage(result.assets[0].uri);
-    console.log("====================================");
-    console.log(image);
-    console.log("====================================");
+    try {
+      let result = await Camera.launchCameraAsync({
+        mediaTypes: Camera.MediaTypeOptions.Images,
+        allowsEditing: false, // Disable cropping
+        quality: 1,
+      });
+      setImage(result.assets[0].uri);
+    } catch (error) {
+      console.error("Error capturing image:", error);
+    }
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    let result = await Camera.launchImageLibraryAsync({
+      mediaTypes: Camera.MediaTypeOptions.Images,
       allowsEditing: false, // Disable cropping
       quality: 1,
     });
