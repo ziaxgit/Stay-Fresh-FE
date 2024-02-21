@@ -13,9 +13,7 @@ export type RootStackParamList = {
 
 const Home = ({ route }: any) => {
   const itemToAdd = route.params?.itemToAdd;
-  const [currentList, setCurrentList] = useState<Object>(
-    itemsData.groceryItems
-  );
+  const [currentList, setCurrentList] = useState(itemsData.groceryItems);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

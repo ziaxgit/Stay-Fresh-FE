@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Image, View, Text, Alert } from "react-native";
 import * as Camera from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function Scan() {
   const [image, setImage] = useState<string | null>(null);
+  const [alertShown, setAlertShown] = useState<boolean>(false);
   const takePicture = async () => {
     try {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
@@ -35,27 +36,35 @@ export default function Scan() {
   };
 
   useFocusEffect(() => {
-    Alert.alert(
-      "What would you like to do?",
-      null,
-      [
+    if (!alertShown) {
+      Alert.alert(
+        "Please select an option",
+        undefined,
+        [
+          {
+            text: "Scan Receipt",
+            onPress: () => takePicture(),
+          },
+          {
+            text: "Choose from Gallery",
+            onPress: () => pickImage(),
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ],
         {
-          text: "Scan Receipt",
-          onPress: () => takePicture(),
-        },
-        {
-          text: "Choose from Gallery",
-          onPress: () => pickImage(),
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () =>
-          Alert.alert(
-            "This alert was dismissed by tapping outside of the alert dialog."
-          ),
-      }
-    );
+          cancelable: true,
+          onDismiss: () =>
+            Alert.alert(
+              "This alert was dismissed by tapping outside of the alert dialog."
+            ),
+        }
+      );
+      setAlertShown(true);
+    }
+    setAlertShown(false);
   });
 
   return (
@@ -65,6 +74,7 @@ export default function Scan() {
       <View>
         {/* <Text onPress={showCustomAlert}>Show Custom Alert</Text> */}
       </View>
+
       {image && (
         <Image
           source={{ uri: image }}
