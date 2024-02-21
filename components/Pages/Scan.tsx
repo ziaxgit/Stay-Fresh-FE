@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Image, View, Text, Alert } from "react-native";
 import * as Camera from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
+
 export default function Scan() {
   const [image, setImage] = useState<string | null>(null);
   const takePicture = async () => {
@@ -32,6 +33,7 @@ export default function Scan() {
       setImage(result.assets[0].uri);
     }
   };
+
   useFocusEffect(() => {
     Alert.alert(
       "What would you like to do?",
@@ -55,6 +57,7 @@ export default function Scan() {
       }
     );
   });
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {/* <Button title="Take Picture" onPress={takePicture} /> */}
