@@ -5,14 +5,12 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function Scan() {
   const [image, setImage] = useState<string | null>(null);
-
   const takePicture = async () => {
     try {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       if (cameraStatus.status !== "granted") {
         alert("Sorry, we need camera permissions to make this work!");
       }
-
       let result = await Camera.launchCameraAsync({
         mediaTypes: Camera.MediaTypeOptions.Images,
         allowsEditing: false, // Disable cropping
@@ -25,7 +23,6 @@ export default function Scan() {
       console.error("Error capturing image:", error);
     }
   };
-
   const pickImage = async () => {
     let result = await Camera.launchImageLibraryAsync({
       mediaTypes: Camera.MediaTypeOptions.Images,

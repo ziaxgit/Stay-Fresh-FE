@@ -8,6 +8,7 @@ import { useState } from "react";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
+  EditList: undefined;
 };
 
 const Home = ({ route }: any) => {
@@ -28,15 +29,21 @@ const Home = ({ route }: any) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Text style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}>
+        Your current items
+      </Text>
       <Button
         title="Add Item"
         onPress={() => {
           navigation.navigate("AddItem");
         }}
       />
-      <Text style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}>
-        Your current items
-      </Text>
+      <Button
+        title="Edit List"
+        onPress={() => {
+          navigation.navigate("EditList");
+        }}
+      />
       <View style={styles.ItemListHeading}>
         <Text
           style={{
