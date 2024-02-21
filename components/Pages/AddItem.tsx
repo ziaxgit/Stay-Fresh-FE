@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../ListContainer";
+import { RootStackParamList } from "./Home";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-const AddItem = ({ route }: any) => {
-  const { currentList, setCurrentList } = route.params;
+const AddItem = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemName, setItemName] = useState("");
@@ -28,10 +27,9 @@ const AddItem = ({ route }: any) => {
       name: itemName,
       expiryDate: differenceInDays + 1,
     };
-    console.log(itemToAdd);
-    setCurrentList([...currentList, itemToAdd]);
-
-    navigation.navigate("Home");
+    navigation.navigate("Home", {
+      itemToAdd,
+    });
   };
 
   return (

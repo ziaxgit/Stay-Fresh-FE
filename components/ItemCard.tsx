@@ -28,7 +28,7 @@ export default ItemCard;
 
 const styles = StyleSheet.create({
   item: {
-    borderBottomWidth: 5,
+    borderBottomWidth: 3,
     borderBottomColor: "#ccc",
     flexDirection: "row",
     justifyContent: "space-between",
