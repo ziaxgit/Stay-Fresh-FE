@@ -3,13 +3,17 @@ import { StyleSheet, FlatList, Text, View, ScrollView } from "react-native";
 import ItemCard from "./ItemCard";
 import React from "react";
 import { useState } from "react";
-interface pantryListProps {
-  currentList: Object;
-}
-const PantryList: React.FC<pantryListProps> = ({ currentList }: any) => {
+
+type pantryListProps = {
+  currentList: {
+    name: string;
+    expiryDate: number;
+  }[];
+};
+const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
   return (
     <FlatList
-      data={currentList}
+      data={props.currentList}
       renderItem={({ item }) => {
         return <ItemCard name={item.name} expiryDate={item.expiryDate} />;
       }}
