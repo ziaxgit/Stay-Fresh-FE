@@ -5,9 +5,9 @@ import itemsData from "./ItemsData.json";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
-  AddItem: object;
+  AddItem: { currentList: {}; setCurrentList: {} };
 };
 const ListContainer = () => {
   const [currentList, setCurrentList] = useState(itemsData.groceryItems);
