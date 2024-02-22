@@ -40,6 +40,7 @@ export default function TabNavigation() {
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="document-scanner" color={color} size={28} />
           ),
+          unmountOnBlur: true,
         }}
         component={Scan}
       />

@@ -43,15 +43,24 @@ export default function Scan() {
         [
           {
             text: "Scan Receipt",
-            onPress: () => takePicture(),
+            onPress: () => {
+              takePicture();
+              setAlertShown(true);
+            },
           },
           {
             text: "Choose from Gallery",
-            onPress: () => pickImage(),
+            onPress: () => {
+              pickImage();
+              setAlertShown(true);
+            },
           },
           {
             text: "Cancel",
             style: "cancel",
+            onPress: () => {
+              setAlertShown(true);
+            },
           },
         ],
         {
@@ -62,20 +71,12 @@ export default function Scan() {
             ),
         }
       );
-      setAlertShown(true);
     }
-    setAlertShown(false);
   });
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {/* <Button title="Take Picture" onPress={takePicture} /> */}
-      {/* <Button title="Pick Image from Gallery" onPress={pickImage} /> */}
-      <View>
-        {/* <Text onPress={showCustomAlert}>Show Custom Alert</Text> */}
-      </View>
-
-      {image && (
+      {image ? (
         <Image
           source={{ uri: image }}
           style={{
@@ -85,6 +86,10 @@ export default function Scan() {
             objectFit: "contain",
           }}
         />
+      ) : (
+        <Text className="text-xl text-center mx-10">
+          This is where you will see your scanned items.
+        </Text>
       )}
     </View>
   );
