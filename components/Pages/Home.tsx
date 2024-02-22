@@ -39,7 +39,7 @@ const Home = ({ route }: any) => {
       <Button
         title="Edit List"
         onPress={() => {
-          navigation.navigate("EditList", { currentList });
+          navigation.navigate("EditList", { currentList, setCurrentList });
         }}
       />
       <View style={styles.ItemListHeading}>

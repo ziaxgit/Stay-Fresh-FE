@@ -29,7 +29,7 @@ export default function TabNavigation() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" color={color} size={28} />
           ),
-          unmountOnBlur: true,
+          unmountOnBlur: true, //resets stack
         }}
         component={HomeNavigation}
       />

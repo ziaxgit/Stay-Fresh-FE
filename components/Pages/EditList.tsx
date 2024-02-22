@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Button } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { RootStackParamList } from "./Home";
@@ -8,12 +8,29 @@ import EditItemCard from "../EditItemCard";
 const EditList = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const listToEdit = route.params.currentList;
+  const { currentList } = route.params;
+
+  const { setCurrentList } = route.params;
+  const [visibleList, setVisibleList] = useState(currentList);
+  function handleExpiryDateChange(index: number, newExpiryDate: number) {
+    const stupidList = [...visibleList];
+    stupidList[index] = {
+      name: visibleList[index].name,
+      expiryDate: newExpiryDate,
+    };
+    setVisibleList(stupidList);
+  }
   function removeItem(index: number) {
-    listToEdit.splice(index, 1);
+    setVisibleList((currentItems: object[]) => {
+      return currentItems.filter((_, itemIndex) => itemIndex !== index);
+    });
+  }
+  function saveNewList() {
+    setCurrentList(visibleList);
+    navigation.navigate("Home");
   }
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Text
         style={{
           fontSize: 20,
@@ -25,11 +42,20 @@ const EditList = ({ route }: any) => {
         Edit Your List
       </Text>
       <FlatList
-        data={listToEdit}
+        data={visibleList}
         renderItem={({ item, index }) => {
           return (
             <View style={{ display: "flex", position: "relative", zIndex: 1 }}>
-              <EditItemCard name={item.name} expiryDate={item.expiryDate} />
+              <EditItemCard
+                name={item.name}
+                expiryDate={item.expiryDate}
+                item={item}
+                currentList={currentList}
+                setCurrentList={setCurrentList}
+                onExpiryDateChange={(newExpiryDate) => {
+                  handleExpiryDateChange(index, newExpiryDate);
+                }}
+              />
               <Button
                 title="Delete"
                 onPress={() => {
@@ -40,6 +66,7 @@ const EditList = ({ route }: any) => {
           );
         }}
       />
+      <Button title="Save" onPress={saveNewList} />
     </View>
   );
 };
