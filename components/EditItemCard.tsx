@@ -34,19 +34,19 @@ const ItemCard = ({ name, expiryDate }: ItemProp) => {
       >
         {name}
       </Text>
-      <Button title="+" onPress={increaseExpDate}>
-        +
-      </Button>
+      <Button title="+" onPress={increaseExpDate} />
+
       <TextInput
         style={{
           fontSize: 16,
         }}
         defaultValue={expiryDate.toString()}
         value={newExpiryDate}
+        onChangeText={setNewExpiryDate}
+        keyboardType="numeric"
       />
-      <Button title="-" onPress={decreaseExpDate}>
-        -
-      </Button>
+      <Button title="-" onPress={decreaseExpDate} />
+
       {/* {currentExpireryDate} days */}
     </View>
   );
