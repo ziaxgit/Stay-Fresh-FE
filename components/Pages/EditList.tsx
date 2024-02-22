@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Button } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -9,6 +9,9 @@ const EditList = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const listToEdit = route.params.currentList;
+  function removeItem(index: number) {
+    listToEdit.splice(index, 1);
+  }
   return (
     <View>
       <Text
@@ -23,8 +26,18 @@ const EditList = ({ route }: any) => {
       </Text>
       <FlatList
         data={listToEdit}
-        renderItem={({ item }) => {
-          return <EditItemCard name={item.name} expiryDate={item.expiryDate} />;
+        renderItem={({ item, index }) => {
+          return (
+            <View style={{ display: "flex", position: "relative", zIndex: 1 }}>
+              <EditItemCard name={item.name} expiryDate={item.expiryDate} />
+              <Button
+                title="Delete"
+                onPress={() => {
+                  removeItem(index);
+                }}
+              />
+            </View>
+          );
         }}
       />
     </View>
