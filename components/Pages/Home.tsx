@@ -8,7 +8,7 @@ import { useState } from "react";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
-  EditList: undefined;
+  EditList: object;
 };
 
 const Home = ({ route }: any) => {
@@ -39,7 +39,7 @@ const Home = ({ route }: any) => {
       <Button
         title="Edit List"
         onPress={() => {
-          navigation.navigate("EditList");
+          navigation.navigate("EditList", { currentList });
         }}
       />
       <View style={styles.ItemListHeading}>
