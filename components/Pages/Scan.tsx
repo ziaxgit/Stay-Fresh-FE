@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Image, View, Text, Alert } from "react-native";
+import React, { useState } from "react";
+import { Image, View, Text, Alert } from "react-native";
 import * as Camera from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -12,7 +12,7 @@ export default function Scan() {
       if (cameraStatus.status !== "granted") {
         alert("Sorry, we need camera permissions to make this work!");
       }
-      let result = await Camera.launchCameraAsync({
+      const result = await Camera.launchCameraAsync({
         mediaTypes: Camera.MediaTypeOptions.Images,
         allowsEditing: false, // Disable cropping
         quality: 1,
@@ -25,7 +25,7 @@ export default function Scan() {
     }
   };
   const pickImage = async () => {
-    let result = await Camera.launchImageLibraryAsync({
+    const result = await Camera.launchImageLibraryAsync({
       mediaTypes: Camera.MediaTypeOptions.Images,
       allowsEditing: false, // Disable cropping
       quality: 1,
