@@ -8,18 +8,18 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import { deleteItem } from "./Utils/apiCalls";
 
 type ItemProp = { currentList: object; setCurrentList: object };
 
 interface editListProps {
   currentList: [];
   setCurrentList: (arg: object[]) => void;
-  name: string;
-  expiryDate: number;
+  item_name: string;
+  expiry_date: number;
   setIsItemChanged: (arg: boolean) => void;
-  item: { name: string; expiryDate: number };
+  item: { item_name: string; expiryDate: number; item_id: number; };
   onExpiryDateChange: (arg: number) => void;
 }
 
@@ -27,13 +27,22 @@ const ItemCard = (props: editListProps) => {
   const {
     currentList,
     setCurrentList,
-    name,
-    expiryDate,
+    item_name,
+    expiry_date,
     item,
     onExpiryDateChange,
     setIsItemChanged,
   } = props;
-  const [newExpiryDate, setNewExpiryDate] = useState(expiryDate.toString());
+
+  const currentDate = Date.now();
+  const formattedExpiryDate = Date.parse(expiry_date.toString());
+  let daysToExpire = Math.floor((Number(formattedExpiryDate) - currentDate) / 1000 / 60 / 60 / 24) + 1
+
+  const [newExpiryDate, setNewExpiryDate] = useState(daysToExpire.toString());
+  const [isDeleted, setIsDeleted] = useState(false)
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState(null);
+
   function increaseExpDate() {
     const convertExpDate = Number(newExpiryDate) + 1;
     setNewExpiryDate(convertExpDate.toString());
@@ -50,26 +59,55 @@ const ItemCard = (props: editListProps) => {
     setIsItemChanged(true);
   }
 
+  function handleDeleteItem() {
+
+    deleteItem(item.item_id).then((data)=>{
+      setIsDeleted(true)
+      setIsError(false);
+
+    }).catch((error)=>{
+      setIsDeleted(false)
+      setError(error.response.data.msg)
+      setIsError(true)
+
+    })
+
+  }
+
+  if (isDeleted) return (
+    <View>
+      <Text>Item has been deleted</Text>
+    </View>
+  );
+
   return (
-    <View className="flex-row justify-between items-center px-4 py-2 bg-white rounded-2xl shadow-md mx-2 ">
-      <View>
-        <Text className="text-xl font-medium">{name}</Text>
-      </View>
-      <View className="flex-row gap-1 ">
-        <TouchableOpacity onPress={increaseExpDate}>
-          <Ionicons name="add-circle-outline" size={40} color="green" />
+    <View>
+      <View className="flex-row justify-between items-center px-4 py-2 bg-white rounded-2xl shadow-md mx-2 my-2 ">
+        <View>
+          <Text className="text-xl font-medium">{item_name}</Text>
+        </View>
+        <View className="flex-row gap-1 ">
+          <TouchableOpacity onPress={increaseExpDate}>
+            <Ionicons name="add-circle-outline" size={40} color="green" />
+          </TouchableOpacity>
+
+          <TextInput
+            className="text-lg font-medium text-center leading-6 pb-1 w-10  bg-gray-200 rounded-md"
+            value={newExpiryDate.toString()}
+            onChangeText={setNewExpiryDate}
+            keyboardType="numeric"
+            readOnly={true}
+          />
+
+          <TouchableOpacity onPress={decreaseExpDate}>
+            <Feather name="minus-circle" size={35} color="salmon" />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={handleDeleteItem}>
+          <AntDesign name="delete" size={24} color="black" />
         </TouchableOpacity>
-        <TextInput
-          className="text-lg font-medium text-center leading-6 pb-1 w-10  bg-gray-200 rounded-md"
-          value={newExpiryDate.toString()}
-          onChangeText={setNewExpiryDate}
-          keyboardType="numeric"
-          readOnly={true}
-        />
-        <TouchableOpacity onPress={decreaseExpDate}>
-          <Feather name="minus-circle" size={35} color="salmon" />
-        </TouchableOpacity>
       </View>
+      {isError? <Text>{error}</Text>:null}
     </View>
   );
 };
