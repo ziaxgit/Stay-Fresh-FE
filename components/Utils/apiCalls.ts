@@ -15,3 +15,11 @@ export const postItemByHomeId = (newItem: object) => {
       return data;
     });
 };
+
+export const getUserNameByHomeId = () => {
+  return axios
+    .get("https://stay-fresh.onrender.com/api/users")
+    .then(({ data }) => {
+      return data;
+    });
+};
