@@ -3,9 +3,8 @@ import {
   Button,
   Text,
   View,
-  TouchableOpacity,
   TextInput,
-  Pressable,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -57,9 +56,9 @@ const ItemCard = (props: editListProps) => {
         <Text className="text-xl font-medium">{name}</Text>
       </View>
       <View className="flex-row gap-1 ">
-        <Pressable onPress={increaseExpDate}>
+        <TouchableOpacity onPress={increaseExpDate}>
           <Ionicons name="add-circle-outline" size={40} color="green" />
-        </Pressable>
+        </TouchableOpacity>
         <TextInput
           className="text-lg font-medium text-center leading-6 pb-1 w-10  bg-gray-200 rounded-md"
           value={newExpiryDate.toString()}
@@ -67,9 +66,9 @@ const ItemCard = (props: editListProps) => {
           keyboardType="numeric"
           readOnly={true}
         />
-        <Pressable onPress={decreaseExpDate}>
+        <TouchableOpacity onPress={decreaseExpDate}>
           <Feather name="minus-circle" size={35} color="salmon" />
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

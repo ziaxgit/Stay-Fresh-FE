@@ -37,7 +37,7 @@ const AddItem = () => {
       <Text className="text-2xl text-center m-2 mb-4 font-semibold">
         Add new item
       </Text>
-      <View className="bg-lime-400 p-4 rounded-2xl shadow-md">
+      <View className="bg-green-400 p-4 rounded-2xl shadow-md">
         <Text className="text-xl mb-1 font-medium">Item name</Text>
         <TextInput
           className="py-3 px-2 bg-slate-100 rounded-md mb-4 "
@@ -58,20 +58,20 @@ const AddItem = () => {
       {}
       <View className="flex-row justify-center">
         <TouchableOpacity
-          className="w-2/6 mt-8 items-center overflow-hidden"
+          className="w-2/6 mt-8 items-center overflow-hidden "
           onPress={addToList}
         >
           <Text
             style={{
-              borderRadius: 10,
+              borderRadius: 20,
               padding: 10,
               overflow: "hidden",
-              backgroundColor: "#0398fc",
+              backgroundColor: "#38a169",
               color: "white",
               fontSize: 20,
             }}
           >
-            Add Items
+            Add Item
           </Text>
         </TouchableOpacity>
       </View>

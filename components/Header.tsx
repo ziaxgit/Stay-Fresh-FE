@@ -5,7 +5,6 @@ const Header = () => {
   return (
     <View style={styles.header}>
       <Image style={styles.image} source={require("../assets/app-logo.png")} />
-      <Text></Text>
     </View>
   );
 };
@@ -16,7 +15,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     paddingHorizontal: 10,
-    marginBottom: -10,
+    // marginBottom: -10,
   },
   headerText: {
     fontSize: 25,
@@ -24,6 +23,7 @@ const styles = StyleSheet.create({
   },
   image: {
     marginTop: -10,
+    marginBottom: -10,
     width: 300,
     resizeMode: "contain",
   },

@@ -1,4 +1,11 @@
-import { StyleSheet, Button, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "../PantryList";
 import itemsData from "../ItemsData.json";
@@ -8,7 +15,12 @@ import { useState } from "react";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
-  EditList: object;
+  EditList: {
+    currentList: { name: string; expiryDate: number }[];
+    setCurrentList: (
+      currentList: { name: string; expiryDate: number }[]
+    ) => void;
+  };
 };
 
 const Home = ({ route }: any) => {
@@ -26,41 +38,63 @@ const Home = ({ route }: any) => {
   }, [itemToAdd]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Text style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}>
-        Your current items
-      </Text>
-      <Button
-        title="Add Item"
-        onPress={() => {
-          navigation.navigate("AddItem");
-        }}
-      />
-      <Button
-        title="Edit List"
-        onPress={() => {
-          navigation.navigate("EditList", { currentList, setCurrentList });
-        }}
-      />
-      <View style={styles.ItemListHeading}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "bold",
-          }}
-        >
-          Name
+    <View className="flex-1">
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <Text className="font-medium shadow-gray-700 italic text-base text-center -my-q ">
+          Your Eco-Friendly Grocery Companion
         </Text>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "bold",
-          }}
-        >
-          Expires in
-        </Text>
+        <View className="border-b-2 border-gray-300 rounded-b-md ">
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: "center",
+              paddingTop: 10,
+              borderBottomWidth: 5,
+              borderColor: "red",
+              fontWeight: "bold",
+            }}
+          >
+            Current Items
+          </Text>
+        </View>
+        <View style={styles.ItemListHeading}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            Item Name
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            Expires in
+          </Text>
+        </View>
+        <PantryList currentList={currentList} />
       </View>
-      <PantryList currentList={currentList} />
+      <View className="flex flex-row justify-around my-2">
+        <TouchableOpacity
+          className="rounded-full bg-green-700 px-3 py-2"
+          onPress={() => {
+            navigation.navigate("AddItem");
+          }}
+        >
+          <Text className="text-lg text-white font-medium  ">Add an item</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-orange-500 rounded-full px-3 py-2"
+          onPress={() => {
+            navigation.navigate("EditList", { currentList, setCurrentList });
+          }}
+        >
+          <Text className="text-lg text-white font-medium">Edit your list</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -73,8 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    backgroundColor: "orange",
+    backgroundColor: "white",
   },
 });

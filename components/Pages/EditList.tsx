@@ -4,7 +4,6 @@ import {
   View,
   FlatList,
   Button,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -16,9 +15,8 @@ import EditItemCard from "../EditItemCard";
 const EditList = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { currentList } = route.params;
+  const { currentList, setCurrentList } = route.params;
 
-  const { setCurrentList } = route.params;
   const [isItemChanged, setIsItemChanged] = useState(false);
   const [visibleList, setVisibleList] = useState(currentList);
   function handleExpiryDateChange(index: number, newExpiryDate: number) {
@@ -46,6 +44,7 @@ const EditList = ({ route }: any) => {
           textAlign: "center",
           paddingBottom: 10,
           backgroundColor: "white",
+          fontWeight: "bold",
         }}
       >
         Edit Your List
