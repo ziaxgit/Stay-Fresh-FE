@@ -5,8 +5,8 @@ import React from "react";
 
 type pantryListProps = {
   currentList: {
-    name: string;
-    expiryDate: number;
+    item_name: string;
+    expiry_date: number;
   }[];
 };
 const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
@@ -15,7 +15,9 @@ const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
       className="bg-green-400 rounded-b-lg py-2"
       data={props.currentList}
       renderItem={({ item }) => {
-        return <ItemCard name={item.name} expiryDate={item.expiryDate} />;
+        return (
+          <ItemCard item_name={item.item_name} expiryDate={item.expiry_date} />
+        );
       }}
       ListFooterComponent={<View style={{ height: 10 }} />}
     />
