@@ -11,7 +11,7 @@ const ItemCard = ({ item_name, expiryDate }: ItemProp) => {
   return (
     <View className="flex-row justify-between items-center px-4 py-2 bg-white rounded-2xl shadow-md mx-2 my-2">
       <Text className="text-xl font-normal">{item_name}</Text>
-      <Text className="text-xl font-normal">{newExpiryDate} days</Text>
+      <Text className="text-xl font-normal">{newExpiryDate + 1} days</Text>
     </View>
   );
 };

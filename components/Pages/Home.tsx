@@ -37,12 +37,19 @@ const Home = ({ route }: any) => {
         setIsLoading(false);
       });
   }, []);
-  console.log(currentList);
+
   useEffect(() => {
     if (itemToAdd !== undefined) {
-      setCurrentList((prevState: any) => {
-        return [...prevState, itemToAdd];
-      });
+      getAllItemsByHomeId()
+        .then(({ data }) => {
+          setCurrentList(data.items);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsError(true);
+          setError(err.response.data.msg);
+          setIsLoading(false);
+        });
     }
   }, [itemToAdd]);
 
