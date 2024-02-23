@@ -16,7 +16,15 @@ export const postItemByHomeId = (newItem: object) => {
     });
 };
 
+export const getUserNameByHomeId = () => {
+  return axios
+    .get("https://stay-fresh.onrender.com/api/users")
+    .then(({ data }) => {
+      return data;
+    });
+};
 export const deleteItem = (item_id: number) => {
   return axios.delete(
     `https://stay-fresh.onrender.com/api/items/${item_id}` ).then((response)=>{return response});
 }
+
