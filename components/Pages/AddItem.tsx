@@ -43,7 +43,7 @@ const AddItem = () => {
             text: "Add Another Item",
             onPress: () => {
               setItemName("");
-              setItemPrice("0");
+              setItemPrice("");
               setExpiryDate(new Date());
             },
           },

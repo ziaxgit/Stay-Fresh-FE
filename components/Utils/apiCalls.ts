@@ -15,3 +15,8 @@ export const postItemByHomeId = (newItem: object) => {
       return data;
     });
 };
+
+export const deleteItem = (item_id: number) => {
+  return axios.delete(
+    `https://stay-fresh.onrender.com/api/items/${item_id}` ).then((response)=>{return response});
+}

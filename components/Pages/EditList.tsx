@@ -56,10 +56,10 @@ const EditList = ({ route }: any) => {
         data={visibleList}
         renderItem={({ item, index }) => {
           return (
-            <View style={{ zIndex: 1 }}>
+            <View style={{ zIndex: 1, }}>
               <EditItemCard
-                name={item.name}
-                expiryDate={item.expiryDate}
+                item_name={item.item_name}
+                expiry_date={item.expiry_date}
                 item={item}
                 currentList={currentList}
                 setCurrentList={setCurrentList}
@@ -68,13 +68,13 @@ const EditList = ({ route }: any) => {
                   handleExpiryDateChange(index, newExpiryDate);
                 }}
               />
-              <Button
+              {/* <Button
                 title="Delete"
                 onPress={() => {
                   removeItem(index);
                   setIsItemChanged(true);
                 }}
-              />
+              /> */}
             </View>
           );
         }}

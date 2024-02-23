@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "../PantryList";
 import itemsData from "../ItemsData.json";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { getAllItemsByHomeId } from "../Utils/apiCalls";
@@ -18,6 +18,7 @@ export type RootStackParamList = {
 };
 
 const Home = ({ route }: any) => {
+  const isFocused = useIsFocused();
   const itemToAdd = route.params?.itemToAdd;
   const [currentList, setCurrentList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,17 +27,19 @@ const Home = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
-    getAllItemsByHomeId()
-      .then(({ data }) => {
-        setCurrentList(data.items);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsError(true);
-        setError(err.response.data.msg);
-        setIsLoading(false);
-      });
-  }, []);
+    if(isFocused){
+      getAllItemsByHomeId()
+        .then(({ data }) => {
+          setCurrentList(data.items);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsError(true);
+          setError(err.response.data.msg);
+          setIsLoading(false);
+        });
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (itemToAdd !== undefined) {
