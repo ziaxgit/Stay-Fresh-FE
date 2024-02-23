@@ -23,3 +23,8 @@ export const getUserNameByHomeId = () => {
       return data;
     });
 };
+export const deleteItem = (item_id: number) => {
+  return axios.delete(
+    `https://stay-fresh.onrender.com/api/items/${item_id}` ).then((response)=>{return response});
+}
+
