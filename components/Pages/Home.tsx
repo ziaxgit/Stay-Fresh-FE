@@ -1,17 +1,11 @@
-import {
-  StyleSheet,
-  Button,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "../PantryList";
 import itemsData from "../ItemsData.json";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
+import { getAllItemsByHomeId } from "../Utils/apiCalls";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
@@ -25,10 +19,25 @@ export type RootStackParamList = {
 
 const Home = ({ route }: any) => {
   const itemToAdd = route.params?.itemToAdd;
-  const [currentList, setCurrentList] = useState(itemsData.groceryItems);
+  const [currentList, setCurrentList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(null);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  useEffect(() => {
+    getAllItemsByHomeId()
+      .then(({ data }) => {
+        setCurrentList(data.items);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsError(true);
+        setError(err.response.data.msg);
+        setIsLoading(false);
+      });
+  }, []);
+  console.log(currentList);
   useEffect(() => {
     if (itemToAdd !== undefined) {
       setCurrentList((prevState: any) => {
@@ -75,7 +84,15 @@ const Home = ({ route }: any) => {
             Expires in
           </Text>
         </View>
-        <PantryList currentList={currentList} />
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : isError ? (
+          <Text>{error}</Text>
+        ) : currentList.length === 0 ? (
+          <Text>Your list is currently empty</Text>
+        ) : (
+          <PantryList currentList={currentList} />
+        )}
       </View>
       <View className="flex flex-row justify-around my-2">
         <TouchableOpacity
