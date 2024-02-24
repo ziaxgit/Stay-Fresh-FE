@@ -52,11 +52,11 @@ const EditList = ({ route }: any) => {
 
       <FlatList
         scrollEnabled={true}
-        className="pt-4 bg-green-400 pb-2 rounded-b-xl"
+        className="pt-2 bg-green-400 pb-2 rounded-b-xl"
         data={visibleList}
         renderItem={({ item, index }) => {
           return (
-            <View style={{ zIndex: 1, }}>
+            <View style={{ zIndex: 1 }}>
               <EditItemCard
                 item_name={item.item_name}
                 expiry_date={item.expiry_date}
@@ -68,13 +68,6 @@ const EditList = ({ route }: any) => {
                   handleExpiryDateChange(index, newExpiryDate);
                 }}
               />
-              {/* <Button
-                title="Delete"
-                onPress={() => {
-                  removeItem(index);
-                  setIsItemChanged(true);
-                }}
-              /> */}
             </View>
           );
         }}

@@ -59,7 +59,7 @@ const Home = ({ route }: any) => {
   return (
     <View className="flex-1">
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <Text className="font-medium shadow-gray-700 italic text-base text-center -my-q ">
+        <Text className="font-medium shadow-gray-700 italic text-sm text-center -mt-1 ">
           Your Eco-Friendly Grocery Companion
         </Text>
         <View className="border-b-2 border-gray-300 rounded-b-md ">

@@ -4,6 +4,12 @@ import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import OpenAI from "openai";
+import config from "../../secret";
+
+const openai = new OpenAI({
+  apiKey: config.OPENAI_API_KEY,
+});
 
 export default function Scan() {
   const [image, setImage] = useState<string | null>(null);
@@ -24,7 +30,6 @@ export default function Scan() {
       });
       if (!result.canceled) {
         setImage(result.assets[0].uri);
-        setTexts("");
       }
     } catch (error) {
       console.error("Error capturing image:", error);
@@ -39,7 +44,6 @@ export default function Scan() {
     });
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      setTexts("");
     }
   };
 
@@ -63,17 +67,14 @@ export default function Scan() {
             image: {
               content: base64ImageData,
             },
-            features: [{ type: "TEXT_DETECTION" }],
+            features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
           },
         ],
       };
 
       const apiResponse = await axios.post(apiURL, requestData);
-      console.log(apiResponse.data.responses[0].textAnnotations[0].description);
-      const detectedTexts = apiResponse.data.responses[0].textAnnotations?.map(
-        (result: any) => result.description
-      ) || ["No text detected"];
       setTexts(apiResponse.data.responses[0].textAnnotations[0].description);
+      // callOpenAI(apiResponse.data.responses[0].textAnnotations[0].description);
     } catch (error) {
       console.error("Error analysing image: ", error);
       alert("Error analysing image. Please try again later.");
@@ -121,27 +122,78 @@ export default function Scan() {
     }, [alertShown])
   );
 
+  const callOpenAI = async (scannedText: string) => {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content:
+            'You are an expert receipt scanner. Given a list of text information, your job is to return an array with ONLY FOOD items from the text.\n\nEach food item should should be an object with property "itemName", "price: 0", "purchaseDate": todays date in javascript new Date().toString() and an average "expiryDate" based on your calculation of the items shelf life in javascript new Date().toString(). \n\nYou must research the internet and figure out which of the items could potentially be a food item if you are not sure. Your response should look like, \n\n[\n    {\n      itemName: "Apple",\n      price: "0",\n      purchaseDate: new Date().toString(),\n      expiryDate: new Date().toString(), // based on your knowledge of the item\n    },\n    {\n      itemName: "Milk",\n      price: "0",\n      purchaseDate: new Date().toString(),\n      expiryDate: new Date().toString(), // based on your knowledge of the item\n    },\n  ]\n',
+        },
+        {
+          role: "user",
+          content: scannedText,
+        },
+      ],
+      temperature: 1,
+      max_tokens: 2000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+    console.log(response.choices[0].message.content);
+    console.log(response);
+  };
+
+  const items = [
+    {
+      itemName: "Milk",
+      price: "1.99",
+      purchaseDate: new Date().toString(),
+      expiryDate: new Date(
+        new Date().getTime() + 2 * 24 * 60 * 60 * 1000
+      ).toString(),
+    },
+    {
+      itemName: "Cheese",
+      price: "3.50",
+      purchaseDate: new Date().toString(),
+      expiryDate: new Date(
+        new Date().getTime() + 3 * 24 * 60 * 60 * 1000
+      ).toString(),
+    },
+    {
+      itemName: "Butter",
+      price: "2.30",
+      purchaseDate: new Date().toString(),
+      expiryDate: new Date(
+        new Date().getTime() + 2 * 24 * 60 * 60 * 1000
+      ).toString(),
+    },
+  ];
+
+  console.log(items);
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {image && (
-        <>
-          <ScrollView style={{ marginTop: 10 }}>
-            <Image
-              source={{ uri: image }}
-              style={{
-                width: 400,
-                height: 400,
-                marginTop: 20,
-                resizeMode: "contain",
-              }}
-            />
-            <Button title="Analyse Image" onPress={analyseImage} />
+        <ScrollView style={{ marginTop: 10 }}>
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 400,
+              height: 400,
+              marginTop: 20,
+              resizeMode: "contain",
+            }}
+          />
+          <Button title="Analyse Image" onPress={analyseImage} />
 
-            <View className="bg-red-200">
-              <Text className="text-lg">{texts}</Text>
-            </View>
-          </ScrollView>
-        </>
+          <View className="bg-red-200">
+            <Text className="text-lg text-center">{texts}</Text>
+          </View>
+        </ScrollView>
       )}
       {!image && (
         <Text style={{ textAlign: "center", margin: 20 }} className="text-lg">
