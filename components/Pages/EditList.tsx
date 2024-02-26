@@ -16,9 +16,9 @@ const EditList = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { currentList, setCurrentList } = route.params;
-
   const [isItemChanged, setIsItemChanged] = useState(false);
   const [visibleList, setVisibleList] = useState(currentList);
+
   function handleExpiryDateChange(index: number, newExpiryDate: number) {
     const stupidList = [...visibleList];
     stupidList[index] = {
