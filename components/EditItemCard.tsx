@@ -8,7 +8,13 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import {
+  Ionicons,
+  AntDesign,
+  Feather,
+  MaterialIcons,
+} from "@expo/vector-icons";
+
 import { deleteItem } from "./Utils/apiCalls";
 
 type ItemProp = { currentList: object; setCurrentList: object };
@@ -86,9 +92,10 @@ const ItemCard = (props: editListProps) => {
   return (
     <View>
       <View className="flex-row justify-between px-4 py-1 bg-white rounded-2xl shadow-md mx-2 my-2 flex-wrap">
-        <View className="flex-row gap-2 items-center ">
+        <View className="flex-row gap-1 items-center ">
           <TouchableOpacity onPress={handleDeleteItem}>
             <AntDesign name="delete" size={30} color="red" />
+            {/* <MaterialIcons name="delete-forever" size={35} color="red" /> */}
           </TouchableOpacity>
           <Text className="text-xl font-medium">{item_name}</Text>
         </View>

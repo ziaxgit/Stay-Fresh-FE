@@ -1,20 +1,33 @@
 import React, { useState } from "react";
-import { Button, Image, View, Text, Alert, ScrollView } from "react-native";
+import {
+  Button,
+  Image,
+  View,
+  Text,
+  Alert,
+  ScrollView,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import OpenAI from "openai";
-import config from "../../secret";
+import ScannedItemCard from "./ScannedItemCard";
 
 const openai = new OpenAI({
-  apiKey: config.OPENAI_API_KEY,
+  apiKey: process.env.EXPO_PUBLIC_OPENAI_KEY,
 });
 
 export default function Scan() {
   const [image, setImage] = useState<string | null>(null);
   const [alertShown, setAlertShown] = useState(false);
   const [texts, setTexts] = useState("");
+  const [itemsByAi, setItemsByAi] = useState<object[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean | null>(null);
+  const [showButton, setShowButton] = useState(true);
 
   const takePicture = async () => {
     try {
@@ -48,13 +61,14 @@ export default function Scan() {
   };
 
   const analyseImage = async () => {
+    setIsLoading(true);
+    setShowButton(false);
     if (!image) {
       alert("Please select an image first!");
       return;
     }
 
-    const apiKey = "AIzaSyDpJpxJVUAkkWpu0f9W0cVzKxHn1qL3MZg";
-    const apiURL = `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`;
+    const apiURL = `https://vision.googleapis.com/v1/images:annotate?key=${process.env.EXPO_PUBLIC_OCR_KEY}`;
 
     try {
       const base64ImageData = await FileSystem.readAsStringAsync(image, {
@@ -74,7 +88,14 @@ export default function Scan() {
 
       const apiResponse = await axios.post(apiURL, requestData);
       setTexts(apiResponse.data.responses[0].textAnnotations[0].description);
-      // callOpenAI(apiResponse.data.responses[0].textAnnotations[0].description);
+      const itemsByAiString = await callOpenAI(
+        apiResponse.data.responses[0].textAnnotations[0].description
+      );
+      setIsLoading(false);
+      console.log(itemsByAiString, "<<< original data");
+      const parsedData = itemsByAiString && JSON.parse(itemsByAiString);
+      console.log(parsedData, "<<< parsedData");
+      setItemsByAi([...parsedData]);
     } catch (error) {
       console.error("Error analysing image: ", error);
       alert("Error analysing image. Please try again later.");
@@ -129,7 +150,7 @@ export default function Scan() {
         {
           role: "system",
           content:
-            'You are an expert receipt scanner. Given a list of text information, your job is to return an array with ONLY FOOD items from the text.\n\nEach food item should should be an object with property "itemName", "price: 0", "purchaseDate": todays date in javascript new Date().toString() and an average "expiryDate" based on your calculation of the items shelf life in javascript new Date().toString(). \n\nYou must research the internet and figure out which of the items could potentially be a food item if you are not sure. Your response should look like, \n\n[\n    {\n      itemName: "Apple",\n      price: "0",\n      purchaseDate: new Date().toString(),\n      expiryDate: new Date().toString(), // based on your knowledge of the item\n    },\n    {\n      itemName: "Milk",\n      price: "0",\n      purchaseDate: new Date().toString(),\n      expiryDate: new Date().toString(), // based on your knowledge of the item\n    },\n  ]\n',
+            'You are an expert receipt scanner that is tasked with finding edible food items from a receipt. Given a list of text information, your job is to return a list of objects in JSON format with ONLY FOOD items from the text. \n\nYou must use your knowledge and information from the internet to figure out when a specific food item is likely to expire without any refrigeration.\n\nEach food item should should be an object with property "itemName", "price" and "daysToExpiry" as an estimated number of days before the item will expire e.g. 3 \n\nFor example given the data:\nTHE.SHOP\nNeura, IE #70823\nMilk 2.77\ncheese 6.4\nbutter 1.45\n\nYour response must look like: \n\n[\n  {\n    "itemName": "Milk",\n    "price": 2.77,\n    "daysToExpiry": 2\n  },\n  {\n    "itemName": "Cheese",\n    "price": 6.4,\n    "daysToExpiry": 7\n  },\n  {\n    "itemName": "Butter",\n    "price": 1.45,\n    "daysToExpiry": 10\n  }\n]\n\nNote, the response does not include "THE.SHOP\nNeura, IE #70823" as it\'s not a food item.\n\nDo not add any further information or text in your response as your response data will be converted into javascript code so additional text such as a note in your response will break the code.',
         },
         {
           role: "user",
@@ -142,9 +163,11 @@ export default function Scan() {
       frequency_penalty: 0,
       presence_penalty: 0,
     });
-    console.log(response.choices[0].message.content);
-    console.log(response);
+    const scannedAiItems = response.choices[0].message.content;
+    return scannedAiItems;
   };
+
+  console.log(itemsByAi);
 
   const items = [
     {
@@ -173,33 +196,59 @@ export default function Scan() {
     },
   ];
 
-  console.log(items);
-
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <ScrollView>
       {image && (
-        <ScrollView style={{ marginTop: 10 }}>
+        <View>
           <Image
             source={{ uri: image }}
             style={{
               width: 400,
               height: 400,
-              marginTop: 20,
+              marginTop: -10,
+              marginBottom: 10,
               resizeMode: "contain",
             }}
           />
-          <Button title="Analyse Image" onPress={analyseImage} />
-
-          <View className="bg-red-200">
-            <Text className="text-lg text-center">{texts}</Text>
-          </View>
-        </ScrollView>
+          {showButton && (
+            <TouchableOpacity
+              onPress={analyseImage}
+              className="flex-row justify-center"
+            >
+              <View className="bg-green-700 p-3 rounded-full">
+                <Text className="text-white text-base">Analyse Receipt</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          {isLoading === true && (
+            <View className="mt-2 justify-center items-center gap-1">
+              <ActivityIndicator size={"large"} color="red" />
+              <Text className="text-lg font-medium">Analysing receipt...</Text>
+            </View>
+          )}
+          {isLoading === false && (
+            <View>
+              <Text className="text-lg leading-5 mx-4 mb-4 text-center">
+                We found the following food items from your receipt. Please note
+                the expiry day is only an estimate. Add or remove items and
+                adjust expiry day as you wish.
+              </Text>
+              <View className="flex-row justify-between mx-8 mt-2">
+                <Text className="text-lg font-medium">Item Name</Text>
+                <Text className="text-lg font-medium">Estimated Expiry</Text>
+              </View>
+              {itemsByAi.map((eachItem, index) => {
+                return <ScannedItemCard key={index} eachItem={eachItem} />;
+              })}
+            </View>
+          )}
+        </View>
       )}
       {!image && (
         <Text style={{ textAlign: "center", margin: 20 }} className="text-lg">
           This is where you will see your scanned items.
         </Text>
       )}
-    </View>
+    </ScrollView>
   );
 }

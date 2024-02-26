@@ -1,8 +1,18 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "../PantryList";
 import itemsData from "../ItemsData.json";
-import { useNavigation, useFocusEffect, useIsFocused } from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useIsFocused,
+} from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { getAllItemsByHomeId } from "../Utils/apiCalls";
@@ -27,7 +37,7 @@ const Home = ({ route }: any) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
-    if(isFocused){
+    if (isFocused) {
       getAllItemsByHomeId()
         .then(({ data }) => {
           setCurrentList(data.items);
@@ -95,7 +105,10 @@ const Home = ({ route }: any) => {
           </Text>
         </View>
         {isLoading ? (
-          <Text>Loading...</Text>
+          <View className="items-center gap-2">
+            <ActivityIndicator size={"large"} color={"red"} />
+            <Text className="text-lg">Getting your items...</Text>
+          </View>
         ) : isError ? (
           <Text>{error}</Text>
         ) : currentList.length === 0 ? (
