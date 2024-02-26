@@ -24,7 +24,17 @@ export const getUserNameByHomeId = () => {
     });
 };
 export const deleteItem = (item_id: number) => {
-  return axios.delete(
-    `https://stay-fresh.onrender.com/api/items/${item_id}` ).then((response)=>{return response});
-}
+  return axios
+    .delete(`https://stay-fresh.onrender.com/api/items/${item_id}`)
+    .then((response) => {
+      return response;
+    });
+};
 
+export const getHomeName = () => {
+  return axios
+    .get("https://stay-fresh.onrender.com/api/homes")
+    .then(({ data }) => {
+      return data;
+    });
+};
