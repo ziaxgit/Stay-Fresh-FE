@@ -16,8 +16,7 @@ import {
 } from "@expo/vector-icons";
 
 import { deleteItem } from "./Utils/apiCalls";
-
-type ItemProp = { currentList: object; setCurrentList: object };
+import { patchItemById } from "./Utils/apiCalls";
 
 interface editListProps {
   currentList: [];
@@ -25,7 +24,7 @@ interface editListProps {
   item_name: string;
   expiry_date: number;
   setIsItemChanged: (arg: boolean) => void;
-  item: { item_name: string; expiryDate: number; item_id: number };
+  item: { item_name: string; expiry_date: number; item_id: number };
   onExpiryDateChange: (arg: number) => void;
 }
 
@@ -42,30 +41,50 @@ const ItemCard = (props: editListProps) => {
 
   const currentDate = Date.now();
   const formattedExpiryDate = Date.parse(expiry_date.toString());
-  let daysToExpire =
+  const daysToExpire =
     Math.floor(
       (Number(formattedExpiryDate) - currentDate) / 1000 / 60 / 60 / 24
     ) + 1;
 
-  const [newExpiryDate, setNewExpiryDate] = useState(daysToExpire.toString());
+  const [newDaysToExpire, setNewDaysToExpire] = useState(
+    daysToExpire.toString()
+  );
   const [isDeleted, setIsDeleted] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
+  const [hasBeenChanged, setHasBeenChanged] = useState(false);
+  const [updatedExpiryDate, setUpdatedExpiryDate] = useState(
+    item.expiry_date.toString()
+  );
+
+  function editExpiryDate(change: number) {
+    setNewDaysToExpire((Number(newDaysToExpire) + change).toString());
+    const expiryDateToChange = new Date(updatedExpiryDate);
+    const newDate = new Date(
+      expiryDateToChange.setDate(expiryDateToChange.getDate() + change)
+    );
+    console.log(typeof expiryDateToChange);
+    console.log(typeof newDate, "<-------------");
+    setUpdatedExpiryDate(newDate.toString());
+    setHasBeenChanged(true);
+  }
 
   function increaseExpDate() {
-    const convertExpDate = Number(newExpiryDate) + 1;
-    setNewExpiryDate(convertExpDate.toString());
-    onExpiryDateChange(convertExpDate);
-    setIsItemChanged(true);
+    // const convertExpDate = Number(newExpiryDate) + 1;
+    // setNewExpiryDate(convertExpDate.toString());
+    // onExpiryDateChange(convertExpDate);
+    // setIsItemChanged(true);
+    // setHasBeenChanged(true);
   }
   function decreaseExpDate() {
-    const convertExpDate = Number(newExpiryDate) - 1;
-    if (convertExpDate >= 0) {
-      setNewExpiryDate(convertExpDate.toString());
-
-      onExpiryDateChange(convertExpDate);
-    } else setNewExpiryDate("0");
-    setIsItemChanged(true);
+    // const convertExpDate = Number(newExpiryDate) - 1;
+    // if (convertExpDate >= 0) {
+    //   setNewExpiryDate(convertExpDate.toString());
+    //   setHasBeenChanged(true);
+    //   onExpiryDateChange(convertExpDate);
+    // } else setNewExpiryDate("0");
+    // setIsItemChanged(true);
+    // setHasBeenChanged(true);
   }
 
   function handleDeleteItem() {
@@ -80,6 +99,14 @@ const ItemCard = (props: editListProps) => {
         setError(error.response.data.msg);
         setIsError(true);
       });
+  }
+
+  function handleSave() {
+    patchItemById(item.item_id, { expiry_date: updatedExpiryDate })
+      .then((response) => {
+        setHasBeenChanged(false);
+      })
+      .catch((err) => console.log(err));
   }
 
   if (isDeleted)
@@ -101,22 +128,36 @@ const ItemCard = (props: editListProps) => {
         </View>
 
         <View className="flex-row gap-1 items-center ">
-          <TouchableOpacity onPress={increaseExpDate}>
+          <TouchableOpacity
+            onPress={() => {
+              editExpiryDate(1);
+            }}
+          >
             <Ionicons name="add-circle-outline" size={40} color="green" />
           </TouchableOpacity>
 
           <TextInput
             className="text-lg font-medium text-center leading-6 pb-1 h-8 w-10  bg-gray-200 rounded-md"
-            value={newExpiryDate.toString()}
-            onChangeText={setNewExpiryDate}
+            value={newDaysToExpire.toString()}
+            onChangeText={setNewDaysToExpire}
             keyboardType="numeric"
             readOnly={true}
           />
 
-          <TouchableOpacity onPress={decreaseExpDate}>
+          <TouchableOpacity
+            onPress={() => {
+              editExpiryDate(-1);
+            }}
+            disabled={Number(newDaysToExpire) > 0 ? false : true}
+          >
             <Feather name="minus-circle" size={35} color="#d6881a" />
           </TouchableOpacity>
         </View>
+      </View>
+      <View>
+        {hasBeenChanged ? (
+          <Button title="Save Changes" onPress={handleSave} />
+        ) : null}
       </View>
       {isError ? <Text>{error}</Text> : null}
     </View>
