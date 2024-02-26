@@ -9,7 +9,6 @@ import config from "../../secret";
 
 const openai = new OpenAI({
   apiKey: config.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
 });
 
 export default function Scan() {
