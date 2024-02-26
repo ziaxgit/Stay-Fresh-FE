@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import PantryList from "../PantryList";
-import itemsData from "../ItemsData.json";
 import {
   useNavigation,
   useFocusEffect,
@@ -26,6 +25,8 @@ export type RootStackParamList = {
     ) => void;
   };
 };
+import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Home = ({ route }: any) => {
   const isFocused = useIsFocused();
@@ -72,7 +73,7 @@ const Home = ({ route }: any) => {
         <Text className="font-medium shadow-gray-700 italic text-sm text-center -mt-1 ">
           Your Eco-Friendly Grocery Companion
         </Text>
-        <View className="border-b-2 border-gray-300 rounded-b-md ">
+        <View className="border-b-2 border-green-300 rounded-b-md ">
           <Text
             style={{
               fontSize: 20,
@@ -112,7 +113,9 @@ const Home = ({ route }: any) => {
         ) : isError ? (
           <Text>{error}</Text>
         ) : currentList.length === 0 ? (
-          <Text>Your list is currently empty</Text>
+          <Text className="text-center text-lg mx-4">
+            Your list is currently empty
+          </Text>
         ) : (
           <PantryList currentList={currentList} />
         )}
@@ -124,7 +127,12 @@ const Home = ({ route }: any) => {
             navigation.navigate("AddItem");
           }}
         >
-          <Text className="text-lg text-white font-medium  ">Add an item</Text>
+          <View className="flex flex-row items-center gap-1">
+            <Entypo name="add-to-list" size={24} color="white" />
+            <Text className="text-lg text-white font-medium  ">
+              Add an item
+            </Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           className="bg-orange-500 rounded-full px-3 py-2"
@@ -132,7 +140,12 @@ const Home = ({ route }: any) => {
             navigation.navigate("EditList", { currentList, setCurrentList });
           }}
         >
-          <Text className="text-lg text-white font-medium">Edit your list</Text>
+          <View className="flex flex-row items-center ">
+            <MaterialIcons name="edit-note" size={28} color="white" />
+            <Text className="text-lg text-white font-medium">
+              Edit your list
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     </View>

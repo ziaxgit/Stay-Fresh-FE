@@ -95,6 +95,7 @@ const AddItem = () => {
             value={expiryDate}
             onChange={onChangeDate}
             display="spinner"
+            minimumDate={new Date()}
           />
         </View>
       </View>
