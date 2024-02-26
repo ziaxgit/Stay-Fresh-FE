@@ -36,8 +36,8 @@ const Profile = () => {
   }, []);
 
   const data = [
-    { value: 20, color: "red" },
-    { value: 50, color: "green" },
+    { value: 20, color: "#D3D3D3" },
+    { value: 50, color: "#3BB566" },
   ];
 
   const renderDot = (color: string) => {
@@ -55,18 +55,18 @@ const Profile = () => {
   };
 
   const barData = [
-    {value: 250, label: 'M'},
-    {value: 500, label: 'T', frontColor: '#177AD5'},
-    {value: 745, label: 'W', frontColor: '#177AD5'},
-    {value: 320, label: 'T'},
-    {value: 600, label: 'F', frontColor: '#177AD5'},
-    {value: 256, label: 'S'},
-    {value: 300, label: 'S'},
-];
+    { value: 30, label: "M", frontColor: "#3BB566" },
+    { value: 23, label: "T", frontColor: "#3BB566" },
+    { value: 5, label: "W", frontColor: "#3BB566" },
+    { value: 7, label: "T", frontColor: "#3BB566" },
+    { value: 15, label: "F", frontColor: "#3BB566" },
+    { value: 5, label: "S", frontColor: "#3BB566" },
+    { value: 5, label: "S", frontColor: "#3BB566" },
+  ];
 
   return (
-    <View className="flex-1 items-center  ">
-      <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center">
+    <View className="flex-1 items-center bg-gray-100">
+      <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center mb-5">
         <Text className="text-3xl mb-4 font-bold text-800">PROFILE</Text>
         <View className="flex-row">
           <Image
@@ -97,59 +97,55 @@ const Profile = () => {
           </View>
         </View>
       </View>
-      <View className="pr-48">
-        <PieChart
-          donut
-          data={data}
-          textSize={20}
-          innerRadius={55}
-          radius={80}
-          centerLabelComponent={() => {
-            return (
-              <Text>
-                {" "}
-                <Text style={{ fontSize: 15 }}>Total spent: £50 </Text>
-              </Text>
-            );
-          }}
-        />
-      </View>
-      <View
-        style={{
-          justifyContent: "center",
-          marginBottom: 10,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            width: 120,
-            marginRight: 180,
-            marginTop: 10,
-          }}
-        >
-          {renderDot("green")}
-          <Text style={{ color: "black" }}>Money Saved: £10</Text>
-        </View>
-        <View
-          style={{ flexDirection: "row", alignItems: "center", width: 150 }}
-        >
-          {renderDot("red")}
-          <Text style={{ color: "black" }}>Money Lost: £12.50</Text>
-        </View>
-      </View>
       <ScrollView>
-            <BarChart
-                barWidth={22}
-                noOfSections={3}
-                barBorderRadius={4}
-                frontColor="black"
-                data={barData}
-                yAxisThickness={0}
-                xAxisThickness={0}
+        <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
+          <Text className="text-3xl mb-4 font-bold text-400 text-center">
+            Statistics
+          </Text>
+          <View className="flex-row justify-between mb-6">
+            <PieChart
+              className="rounded-lg w-1/2"
+              donut
+              data={data}
+              textSize={20}
+              innerRadius={50}
+              radius={60}
+              centerLabelComponent={() => (
+                <Text className="text-center">
+                  <Text className="font-semibold text-gray-700">
+                    Total spent:{" "}
+                  </Text>
+                  <Text className="font-semibold text-gray-900 ">£50</Text>
+                </Text>
+              )}
             />
-        </ScrollView>
+            <View className="flex-col justify-center">
+              <View className="flex items-center mb-2 flex-row">
+                {renderDot("#3BB566")}
+                <Text className="text-lg text-gray-900 ml-2">
+                  Saved: £37.50
+                </Text>
+              </View>
+              <View className="flex items-center flex-row">
+                {renderDot("#D3D3D3")}
+                <Text className="text-lg text-gray-900 ml-2">Lost: £12.50</Text>
+              </View>
+            </View>
+          </View>
+          <BarChart
+            className="rounded-lg w-full"
+            barWidth={22}
+            noOfSections={3}
+            barBorderRadius={4}
+            frontColor="black"
+            data={barData}
+            yAxisThickness={0}
+            xAxisThickness={1}
+            isAnimated
+            delay={500}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };

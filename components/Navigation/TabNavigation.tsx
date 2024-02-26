@@ -51,6 +51,7 @@ export default function TabNavigation() {
           tabBarIcon: ({ color }) => (
             <FontAwesome name="user" color={color} size={28} />
           ),
+          unmountOnBlur: true, //resets stack
         }}
         component={Profile}
       />
