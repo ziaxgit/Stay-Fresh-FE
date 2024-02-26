@@ -30,6 +30,15 @@ export const deleteItem = (item_id: number) => {
       return response;
     });
 };
+
+export const getHomeName = () => {
+  return axios
+    .get("https://stay-fresh.onrender.com/api/homes")
+.then(({ data }) => {
+      return data;
+    });
+};
+
 export const patchItemById = (item_id: number, updatedItem: object) => {
   console.log(item_id, updatedItem);
 
