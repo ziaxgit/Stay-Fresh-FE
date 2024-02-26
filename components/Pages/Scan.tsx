@@ -9,6 +9,7 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
@@ -16,6 +17,7 @@ import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import OpenAI from "openai";
 import ScannedItemCard from "./ScannedItemCard";
+import { postItemByHomeId } from "../Utils/apiCalls";
 
 const openai = new OpenAI({
   apiKey: process.env.EXPO_PUBLIC_OPENAI_KEY,
@@ -92,9 +94,10 @@ export default function Scan() {
         apiResponse.data.responses[0].textAnnotations[0].description
       );
       setIsLoading(false);
-      console.log(itemsByAiString, "<<< original data");
+      // console.log(itemsByAiString, "<<< original data");
       const parsedData = itemsByAiString && JSON.parse(itemsByAiString);
-      console.log(parsedData, "<<< parsedData");
+      // console.log(parsedData, "<<< parsedData");
+      // un comment the above after done testing
       setItemsByAi([...parsedData]);
     } catch (error) {
       console.error("Error analysing image: ", error);
@@ -167,50 +170,42 @@ export default function Scan() {
     return scannedAiItems;
   };
 
-  console.log(itemsByAi);
+  console.log(itemsByAi, "<<< setItemsByAi");
 
-  const items = [
-    {
-      itemName: "Milk",
-      price: "1.99",
-      purchaseDate: new Date().toString(),
-      expiryDate: new Date(
-        new Date().getTime() + 2 * 24 * 60 * 60 * 1000
-      ).toString(),
-    },
-    {
-      itemName: "Cheese",
-      price: "3.50",
-      purchaseDate: new Date().toString(),
-      expiryDate: new Date(
-        new Date().getTime() + 3 * 24 * 60 * 60 * 1000
-      ).toString(),
-    },
-    {
-      itemName: "Butter",
-      price: "2.30",
-      purchaseDate: new Date().toString(),
-      expiryDate: new Date(
-        new Date().getTime() + 2 * 24 * 60 * 60 * 1000
-      ).toString(),
-    },
-  ];
+  const handleSave = async () => {
+    try {
+      await Promise.all(
+        itemsByAi.map(async (itemToPost) => {
+          await postItemByHomeId(itemToPost);
+        })
+      );
+      return (
+        <View>
+          <Text>Saved!</Text>
+        </View>
+      );
+    } catch (error) {
+      console.error("Error saving items: ", error);
+      alert("Error saving items. Please try again later.");
+    }
+  };
 
   return (
-    <ScrollView>
-      {image && (
-        <View>
-          <Image
-            source={{ uri: image }}
-            style={{
-              width: 400,
-              height: 400,
-              marginTop: -10,
-              marginBottom: 10,
-              resizeMode: "contain",
-            }}
-          />
-          {showButton && (
+    <KeyboardAvoidingView behavior="padding">
+      <ScrollView className="mt-4 h-full">
+        {showButton && image && (
+          <View>
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: 400,
+                height: 400,
+                marginTop: -10,
+                marginBottom: 10,
+                resizeMode: "contain",
+              }}
+            />
+
             <TouchableOpacity
               onPress={analyseImage}
               className="flex-row justify-center"
@@ -219,36 +214,50 @@ export default function Scan() {
                 <Text className="text-white text-base">Analyse Receipt</Text>
               </View>
             </TouchableOpacity>
-          )}
-          {isLoading === true && (
-            <View className="mt-2 justify-center items-center gap-1">
-              <ActivityIndicator size={"large"} color="red" />
-              <Text className="text-lg font-medium">Analysing receipt...</Text>
+          </View>
+        )}
+        {isLoading === true && (
+          <View className="mt-4 justify-center items-center gap-1">
+            <ActivityIndicator size={"large"} color="red" />
+            <Text className="text-lg font-medium">Analysing receipt...</Text>
+          </View>
+        )}
+        {isLoading === false && (
+          <View>
+            <Text className="text-base leading-5 mx-4 text-center">
+              We found the following food items from your receipt. Please note
+              the expiry day is only an estimate. Add or remove items and adjust
+              expiry day as you wish.
+            </Text>
+            <View className="flex-row justify-between mx-4 mt-2">
+              <Text className="text-base font-medium ml-8">Item Name</Text>
+              <Text className="text-base font-medium ml-7">Price</Text>
+              <Text className="text-base font-medium mr-4">Expiry Date</Text>
             </View>
-          )}
-          {isLoading === false && (
-            <View>
-              <Text className="text-lg leading-5 mx-4 mb-4 text-center">
-                We found the following food items from your receipt. Please note
-                the expiry day is only an estimate. Add or remove items and
-                adjust expiry day as you wish.
-              </Text>
-              <View className="flex-row justify-between mx-8 mt-2">
-                <Text className="text-lg font-medium">Item Name</Text>
-                <Text className="text-lg font-medium">Estimated Expiry</Text>
-              </View>
-              {itemsByAi.map((eachItem, index) => {
-                return <ScannedItemCard key={index} eachItem={eachItem} />;
-              })}
-            </View>
-          )}
-        </View>
-      )}
-      {!image && (
-        <Text style={{ textAlign: "center", margin: 20 }} className="text-lg">
-          This is where you will see your scanned items.
-        </Text>
-      )}
-    </ScrollView>
+            {itemsByAi.map((eachItem, index) => {
+              return (
+                <ScannedItemCard
+                  key={index}
+                  index={index}
+                  eachItem={eachItem}
+                  setItemsByAi={setItemsByAi}
+                />
+              );
+            })}
+            <TouchableOpacity
+              className="mt-4 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
+              onPress={handleSave}
+            >
+              <Text className="text-white text-lg font-medium">Save</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {!image && (
+          <Text style={{ textAlign: "center", margin: 20 }} className="text-lg">
+            This is where you will see your scanned items.
+          </Text>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
