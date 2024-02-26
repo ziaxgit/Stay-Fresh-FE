@@ -1,3 +1,7 @@
+// if add days and then remove days back to origin then save changes should disapear
+// error handling
+// make the number text field editable
+
 import {
   StyleSheet,
   Button,
@@ -53,38 +57,33 @@ const ItemCard = (props: editListProps) => {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
   const [hasBeenChanged, setHasBeenChanged] = useState(false);
+  const [currentDaysToExpire, setCurrentDaysToExpire] = useState(daysToExpire);
   const [updatedExpiryDate, setUpdatedExpiryDate] = useState(
     item.expiry_date.toString()
   );
+  
+
+if (hasBeenChanged === true){
+  if (Number(newDaysToExpire) === currentDaysToExpire) {
+    setHasBeenChanged(false);
+  }
+}
+  
 
   function editExpiryDate(change: number) {
     setNewDaysToExpire((Number(newDaysToExpire) + change).toString());
+
     const expiryDateToChange = new Date(updatedExpiryDate);
     const newDate = new Date(
       expiryDateToChange.setDate(expiryDateToChange.getDate() + change)
     );
-    console.log(typeof expiryDateToChange);
-    console.log(typeof newDate, "<-------------");
-    setUpdatedExpiryDate(newDate.toString());
-    setHasBeenChanged(true);
-  }
 
-  function increaseExpDate() {
-    // const convertExpDate = Number(newExpiryDate) + 1;
-    // setNewExpiryDate(convertExpDate.toString());
-    // onExpiryDateChange(convertExpDate);
-    // setIsItemChanged(true);
-    // setHasBeenChanged(true);
-  }
-  function decreaseExpDate() {
-    // const convertExpDate = Number(newExpiryDate) - 1;
-    // if (convertExpDate >= 0) {
-    //   setNewExpiryDate(convertExpDate.toString());
-    //   setHasBeenChanged(true);
-    //   onExpiryDateChange(convertExpDate);
-    // } else setNewExpiryDate("0");
-    // setIsItemChanged(true);
-    // setHasBeenChanged(true);
+    setUpdatedExpiryDate(newDate.toString());
+
+
+
+    setHasBeenChanged(true);
+
   }
 
   function handleDeleteItem() {
@@ -105,8 +104,26 @@ const ItemCard = (props: editListProps) => {
     patchItemById(item.item_id, { expiry_date: updatedExpiryDate })
       .then((response) => {
         setHasBeenChanged(false);
+        setCurrentDaysToExpire(Number(newDaysToExpire));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(err.response.data.msg);
+        setIsError(true);
+      });
+  }
+
+  function handleTypedDays(event: any) {
+    if (event["nativeEvent"]["text"] < 0) {
+      setNewDaysToExpire(currentDaysToExpire.toString());
+      return;
+    }
+    const changeInDays = Number(newDaysToExpire) - currentDaysToExpire;
+    const expiryDateToChange = new Date(updatedExpiryDate);
+    const newDate = new Date(
+      expiryDateToChange.setDate(expiryDateToChange.getDate() + changeInDays)
+    );
+    setUpdatedExpiryDate(newDate.toString());
+    setHasBeenChanged(true);
   }
 
   if (isDeleted)
@@ -139,9 +156,15 @@ const ItemCard = (props: editListProps) => {
           <TextInput
             className="text-lg font-medium text-center leading-6 pb-1 h-8 w-10  bg-gray-200 rounded-md"
             value={newDaysToExpire.toString()}
-            onChangeText={setNewDaysToExpire}
+            onChangeText={(typedNum) => {
+              setNewDaysToExpire(typedNum.toString());
+            }}
+            onEndEditing={(event) => {
+              handleTypedDays(event);
+            }}
             keyboardType="numeric"
-            readOnly={true}
+            readOnly={false}
+            returnKeyType="done"
           />
 
           <TouchableOpacity
