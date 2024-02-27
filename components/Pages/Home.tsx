@@ -73,14 +73,13 @@ const Home = ({ route }: any) => {
         <Text className="font-medium shadow-gray-700 italic text-sm text-center -mt-1 ">
           Your Eco-Friendly Grocery Companion
         </Text>
-        <View className="border-b-2 border-green-300 rounded-b-md ">
+        <View className="border-b-2 border-green-400 rounded-b-md ">
           <Text
             style={{
               fontSize: 20,
               textAlign: "center",
               paddingTop: 10,
-              borderBottomWidth: 5,
-              borderColor: "red",
+              paddingBottom: 5,
               fontWeight: "bold",
             }}
           >
@@ -127,7 +126,7 @@ const Home = ({ route }: any) => {
             navigation.navigate("AddItem");
           }}
         >
-          <View className="flex flex-row items-center gap-1">
+          <View className="flex-row items-center gap-1">
             <Entypo name="add-to-list" size={24} color="white" />
             <Text className="text-lg text-white font-medium  ">
               Add an item
@@ -140,7 +139,7 @@ const Home = ({ route }: any) => {
             navigation.navigate("EditList", { currentList, setCurrentList });
           }}
         >
-          <View className="flex flex-row items-center ">
+          <View className="flex-row items-center">
             <MaterialIcons name="edit-note" size={28} color="white" />
             <Text className="text-lg text-white font-medium">
               Edit your list

@@ -1,17 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import addDaysToDate from "../Utils/addDaysToDate";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
   const { itemName, daysToExpiry, price } = eachItem;
   const [expiryDate, setExpiryDate] = useState(addDaysToDate(daysToExpiry));
   const [finalPrice, setFinalPrice] = useState(price);
   const [finalItemName, setFinalItemName] = useState(itemName);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isValueChanged, setIsValueChanged] = useState({
+    itemName: false,
+    price: false,
+    expiryDate: false,
+  });
 
-  const onChangeDate = (event: any, selectedDate: any) => {
-    setExpiryDate(selectedDate);
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    hideDatePicker();
+    setExpiryDate(date);
+    setIsValueChanged({
+      ...isValueChanged,
+      expiryDate: true,
+    });
   };
 
   const itemToAdd = {
@@ -31,16 +57,15 @@ const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
   }, [finalItemName, finalPrice, expiryDate]);
 
   return (
-    <View className="flex-row justify-between items-center pr-2 pl-3 py-1 bg-white rounded-2xl shadow-md mx-2 my-1 flex-wrap">
+    <View className="flex-row items-center justify-between px-3 py-2 bg-white rounded-2xl shadow-md mx-2 my-1 flex-wrap">
       <MaterialIcons name="delete-forever" size={25} color="red" />
       <View
         style={{
           borderBottomWidth: 1,
-          backgroundColor: "#ebebeb",
+          backgroundColor: `${isValueChanged.itemName ? `#fab561` : `#ebebeb`}`,
           borderBottomColor: "black",
           padding: 4,
           flexWrap: "wrap",
-          marginRight: 10,
         }}
       >
         <TextInput
@@ -48,34 +73,64 @@ const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
           value={String(finalItemName)}
           onChangeText={(newName) => {
             setFinalItemName(newName);
+            setIsValueChanged({
+              ...isValueChanged,
+              itemName: true,
+            });
           }}
         />
       </View>
       <View
         style={{
           borderBottomWidth: 1,
-          backgroundColor: "#ebebeb",
+          backgroundColor: `${isValueChanged.price ? `#fab561` : `#ebebeb`}`,
           borderBottomColor: "black",
           padding: 4,
+          marginLeft: 5,
         }}
       >
         <TextInput
-          className="w-10 text-center"
+          className="w-10 text-center "
           value={String(finalPrice)}
           onChangeText={(newPrice) => {
             setFinalPrice(newPrice);
+            setIsValueChanged({
+              ...isValueChanged,
+              price: true,
+            });
           }}
           keyboardType="numeric"
           returnKeyType="done"
         />
       </View>
-      <View className="">
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={expiryDate}
-          onChange={onChangeDate}
+
+      <View className="flex-row">
+        <TextInput
+          className="text-center ml-3 p-1"
+          style={{
+            borderBottomWidth: 1,
+            backgroundColor: `${isValueChanged.expiryDate ? `#fab561` : `#ebebeb`}`,
+            borderBottomColor: "black",
+          }}
+          value={expiryDate.toLocaleDateString("en-GB")}
+          readOnly={true}
         />
+        <TouchableOpacity
+          className="ml-1"
+          onPress={() => setDatePickerVisibility(!isDatePickerVisible)}
+        >
+          <MaterialIcons name="edit-calendar" size={24} color="black" />
+        </TouchableOpacity>
       </View>
+
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        minimumDate={new Date()}
+        display="inline"
+        onCancel={hideDatePicker}
+      />
     </View>
   );
 };

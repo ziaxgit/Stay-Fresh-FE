@@ -30,6 +30,7 @@ export default function Scan() {
   const [itemsByAi, setItemsByAi] = useState<object[]>([]);
   const [isLoading, setIsLoading] = useState<boolean | null>(null);
   const [showButton, setShowButton] = useState(true);
+  const [isItemsSaved, setIsItemsSaved] = useState(false);
 
   const takePicture = async () => {
     try {
@@ -179,11 +180,7 @@ export default function Scan() {
           await postItemByHomeId(itemToPost);
         })
       );
-      return (
-        <View>
-          <Text>Saved!</Text>
-        </View>
-      );
+      alert("Items saved successfully!");
     } catch (error) {
       console.error("Error saving items: ", error);
       alert("Error saving items. Please try again later.");
@@ -191,8 +188,12 @@ export default function Scan() {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding">
-      <ScrollView className="mt-4 h-full">
+    <KeyboardAvoidingView
+      className="flex-1"
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
+      <View className="pt-4 ">
         {showButton && image && (
           <View>
             <Image
@@ -227,11 +228,11 @@ export default function Scan() {
             <Text className="text-base leading-5 mx-4 text-center">
               We found the following food items from your receipt. Please note
               the expiry day is only an estimate. Add or remove items and adjust
-              expiry day as you wish.
+              expiry day as appropriate.
             </Text>
             <View className="flex-row justify-between mx-4 mt-2">
-              <Text className="text-base font-medium ml-8">Item Name</Text>
-              <Text className="text-base font-medium ml-7">Price</Text>
+              <Text className="text-base font-medium ml-9">Item Name</Text>
+              <Text className="text-base font-medium ml-9">Price</Text>
               <Text className="text-base font-medium mr-4">Expiry Date</Text>
             </View>
             {itemsByAi.map((eachItem, index) => {
@@ -245,7 +246,7 @@ export default function Scan() {
               );
             })}
             <TouchableOpacity
-              className="mt-4 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
+              className="mt-2 mb-2 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
               onPress={handleSave}
             >
               <Text className="text-white text-lg font-medium">Save</Text>
@@ -257,7 +258,7 @@ export default function Scan() {
             This is where you will see your scanned items.
           </Text>
         )}
-      </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
