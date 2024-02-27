@@ -67,16 +67,16 @@ const Profile = () => {
   return (
     <View className="flex-1 items-center bg-gray-100">
       <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center mb-5">
-        <Text className="text-3xl mb-4 font-bold text-800">PROFILE</Text>
+        <Text className="text-3xl mb-4 font-bold text-500">PROFILE</Text>
         <View className="flex-row">
           <Image
             className="rounded-full w-24 h-24 mb-4 mx-5"
             source={{
-              uri: "https://ca.slack-edge.com/T01KPE0QGCD-U066BE21ALW-g582122507ca-512",
+              uri: "https://kottke.org/plus/misc/images/ai-faces-01.jpg",
             }}
           />
           <View className="flex-col">
-            <Text>
+            <Text className="mt-2">
               <Text className="flex items-center text-lg font-semibold text-gray-700">
                 Username:
               </Text>
@@ -99,8 +99,8 @@ const Profile = () => {
       </View>
       <ScrollView>
         <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
-          <Text className="text-3xl mb-4 font-bold text-400 text-center">
-            Statistics
+          <Text className="text-2xl mb-4 font-bold text-center">
+            STATISTICS
           </Text>
           <View className="flex-row justify-between mb-6">
             <PieChart
