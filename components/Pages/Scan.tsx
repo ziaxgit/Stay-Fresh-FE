@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Button,
   Image,
   View,
   Text,
   Alert,
   ScrollView,
-  FlatList,
   ActivityIndicator,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -19,7 +17,6 @@ import OpenAI from "openai";
 import ScannedItemCard from "./ScannedItemCard";
 import { postItemByHomeId } from "../Utils/apiCalls";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "./Home";
 
@@ -34,6 +31,9 @@ export default function Scan() {
   const [itemsByAi, setItemsByAi] = useState<object[]>([]);
   const [isLoading, setIsLoading] = useState<boolean | null>(null);
   const [showButton, setShowButton] = useState(true);
+  const [deleteIndexes, setDeleteIndexes] = useState<number[]>([]);
+  const [isListEmpty, setIsListEmpty] = useState(false);
+  const [checkListLength, setCheckListLength] = useState(0);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -103,11 +103,20 @@ export default function Scan() {
       setIsLoading(false);
       const parsedData = itemsByAiString && JSON.parse(itemsByAiString);
       setItemsByAi([...parsedData]);
+      // setItemsByAi([
+      //   ...[
+      //     { daysToExpiry: 21, itemName: "Natural Yogurt", price: 0.7 },
+      //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
+      //     { daysToExpiry: 7, itemName: "Plum Tomatoes", price: 1.29 },
+      //   ],
+      // ]);
+      setCheckListLength(parsedData.length);
     } catch (error) {
       console.error("There was an issue: ", error);
       alert(error);
     }
   };
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -177,36 +186,53 @@ export default function Scan() {
 
   const handleSave = async () => {
     try {
-      await Promise.all(
-        itemsByAi.map(async (itemToPost) => {
-          await postItemByHomeId(itemToPost);
-        })
+      const finalItemsToPost = itemsByAi.filter(
+        (_, index) => !deleteIndexes.includes(index)
       );
-      Alert.alert(
-        "Saved successfully!",
-        "These items have been added to your Current List",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              navigation.goBack();
+      if (finalItemsToPost.length === 0) {
+        setIsListEmpty(true);
+      } else {
+        await Promise.all(
+          finalItemsToPost.map(async (itemToPost) => {
+            await postItemByHomeId(itemToPost);
+          })
+        );
+        Alert.alert(
+          "Saved successfully!",
+          "These items have been added to your Homepage",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.goBack();
+              },
             },
-          },
-        ]
-      );
+          ]
+        );
+      }
     } catch (error) {
       console.error("Error saving items: ", error);
       alert("Error saving items. Please try again later.");
     }
   };
 
+  if (isListEmpty) {
+    Alert.alert("Empty List", "There are no items to add", [
+      {
+        text: "Back to Homepage",
+        onPress: () => {
+          navigation.goBack();
+        },
+      },
+    ]);
+  }
   return (
     <KeyboardAvoidingView
       className="flex-1"
       behavior="padding"
       keyboardVerticalOffset={100}
     >
-      <ScrollView className="pt-4">
+      <ScrollView className="">
         {showButton && image && (
           <View>
             <Image
@@ -237,8 +263,8 @@ export default function Scan() {
           </View>
         )}
         {isLoading === false && (
-          <View>
-            <Text className="text-base leading-5 mx-4 text-center">
+          <View className="mt-2">
+            <Text className="text-base mx-6 leading-5 text-center">
               We found the following food items from your receipt. Please note
               the expiry day is only an estimate. Add or remove items and adjust
               expiry day as appropriate.
@@ -254,21 +280,28 @@ export default function Scan() {
                   key={index}
                   index={index}
                   eachItem={eachItem}
+                  setDeleteIndexes={setDeleteIndexes}
                   setItemsByAi={setItemsByAi}
                 />
               );
             })}
-            <TouchableOpacity
-              className="mt-2 mb-2 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
-              onPress={handleSave}
-            >
-              <Text className="text-white text-lg font-medium">Save</Text>
-            </TouchableOpacity>
+            {!isListEmpty && (
+              <TouchableOpacity
+                className="mt-2 mb-2 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
+                onPress={handleSave}
+              >
+                <Text className="text-white text-lg font-medium">Save</Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
         {!image && (
-          <Text style={{ textAlign: "center", margin: 20 }} className="text-lg">
-            This is where you will see your scanned items.
+          <Text
+            style={{ textAlign: "center", margin: 25 }}
+            className="text-lg "
+          >
+            Seamlessly scan your receipts using latest Google Cloud Vision and
+            OpenAI GPT-4 technology
           </Text>
         )}
       </ScrollView>
