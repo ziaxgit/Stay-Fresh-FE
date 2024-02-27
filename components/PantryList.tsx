@@ -7,6 +7,7 @@ type pantryListProps = {
   currentList: {
     item_name: string;
     expiry_date: number;
+    purchase_date: number;
   }[];
 };
 const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
@@ -16,7 +17,11 @@ const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
       data={props.currentList}
       renderItem={({ item }) => {
         return (
-          <ItemCard item_name={item.item_name} expiryDate={item.expiry_date} />
+          <ItemCard
+            item_name={item.item_name}
+            expiryDate={item.expiry_date}
+            purchaseDate={item.purchase_date}
+          />
         );
       }}
       ListFooterComponent={<View style={{ height: 10 }} />}

@@ -8,15 +8,20 @@ import {
 } from "react-native";
 import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import addDaysToDate from "../Utils/addDaysToDate";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
+const ScannedItemCard = ({
+  eachItem,
+  setItemsByAi,
+  index,
+  setDeleteIndexes,
+}: any) => {
   const { itemName, daysToExpiry, price } = eachItem;
   const [expiryDate, setExpiryDate] = useState(addDaysToDate(daysToExpiry));
   const [finalPrice, setFinalPrice] = useState(price);
   const [finalItemName, setFinalItemName] = useState(itemName);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const [isValueChanged, setIsValueChanged] = useState({
     itemName: false,
     price: false,
@@ -56,9 +61,23 @@ const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
     });
   }, [finalItemName, finalPrice, expiryDate]);
 
+  useEffect(() => {
+    if (isDelete) {
+      setDeleteIndexes((currentIndexes: any) => {
+        return [...currentIndexes, index];
+      });
+    }
+  }, [isDelete]);
+
+  if (isDelete) {
+    return null;
+  }
+
   return (
     <View className="flex-row items-center justify-between px-3 py-2 bg-white rounded-2xl shadow-md mx-2 my-1 flex-wrap">
-      <MaterialIcons name="delete-forever" size={25} color="red" />
+      <TouchableOpacity onPress={() => setIsDelete(true)}>
+        <MaterialIcons name="delete-forever" size={26} color="red" />
+      </TouchableOpacity>
       <View
         style={{
           borderBottomWidth: 1,
@@ -109,7 +128,9 @@ const ScannedItemCard = ({ eachItem, setItemsByAi, index }: any) => {
           className="text-center ml-3 p-1"
           style={{
             borderBottomWidth: 1,
-            backgroundColor: `${isValueChanged.expiryDate ? `#fab561` : `#ebebeb`}`,
+            backgroundColor: `${
+              isValueChanged.expiryDate ? `#fab561` : `#ebebeb`
+            }`,
             borderBottomColor: "black",
           }}
           value={expiryDate.toLocaleDateString("en-GB")}
