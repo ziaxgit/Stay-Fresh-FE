@@ -18,6 +18,10 @@ import * as FileSystem from "expo-file-system";
 import OpenAI from "openai";
 import ScannedItemCard from "./ScannedItemCard";
 import { postItemByHomeId } from "../Utils/apiCalls";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "./Home";
 
 const openai = new OpenAI({
   apiKey: process.env.EXPO_PUBLIC_OPENAI_KEY,
@@ -30,7 +34,9 @@ export default function Scan() {
   const [itemsByAi, setItemsByAi] = useState<object[]>([]);
   const [isLoading, setIsLoading] = useState<boolean | null>(null);
   const [showButton, setShowButton] = useState(true);
-  const [isItemsSaved, setIsItemsSaved] = useState(false);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const takePicture = async () => {
     try {
@@ -95,10 +101,7 @@ export default function Scan() {
         apiResponse.data.responses[0].textAnnotations[0].description
       );
       setIsLoading(false);
-      // console.log(itemsByAiString, "<<< original data");
       const parsedData = itemsByAiString && JSON.parse(itemsByAiString);
-      // console.log(parsedData, "<<< parsedData");
-      // un comment the above after done testing
       setItemsByAi([...parsedData]);
     } catch (error) {
       console.error("There was an issue: ", error);
@@ -132,7 +135,7 @@ export default function Scan() {
               style: "cancel",
               onPress: () => {
                 setAlertShown(true);
-                // navigatoration.goBack(); working on this
+                navigation.goBack();
               },
             },
           ],
@@ -172,8 +175,6 @@ export default function Scan() {
     return scannedAiItems;
   };
 
-  console.log(itemsByAi, "<<< setItemsByAi");
-
   const handleSave = async () => {
     try {
       await Promise.all(
@@ -181,7 +182,18 @@ export default function Scan() {
           await postItemByHomeId(itemToPost);
         })
       );
-      alert("Items saved successfully!");
+      Alert.alert(
+        "Saved successfully!",
+        "These items have been added to your Current List",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]
+      );
     } catch (error) {
       console.error("Error saving items: ", error);
       alert("Error saving items. Please try again later.");
@@ -194,7 +206,7 @@ export default function Scan() {
       behavior="padding"
       keyboardVerticalOffset={100}
     >
-      <View className="pt-4 ">
+      <ScrollView className="pt-4">
         {showButton && image && (
           <View>
             <Image
@@ -259,7 +271,7 @@ export default function Scan() {
             This is where you will see your scanned items.
           </Text>
         )}
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
