@@ -1,17 +1,16 @@
 import axios from "axios";
 
-export const getAllItemsByHomeId = () => {
+export const getAllItemsByHomeId = (status: string) => {
   return axios
-    .get("https://stay-fresh.onrender.com/api/homes/1/items")
+    .get("https://stay-fresh.onrender.com/api/homes/1/items", {
+      params: { item_status: status },
+    })
     .then((data) => {
       return data;
     });
 };
 
 export const postItemByHomeId = (newItem: object) => {
-  console.log("====================================");
-  console.log(newItem, "<<< newItem");
-  console.log("====================================");
   return axios
     .post("https://stay-fresh.onrender.com/api/homes/1/items", newItem)
     .then(({ data }) => {

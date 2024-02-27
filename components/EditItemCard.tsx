@@ -9,6 +9,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -27,7 +28,6 @@ interface editListProps {
   setCurrentList: (arg: object[]) => void;
   item_name: string;
   expiry_date: number;
-  setIsItemChanged: (arg: boolean) => void;
   item: { item_name: string; expiry_date: number; item_id: number };
   onExpiryDateChange: (arg: number) => void;
 }
@@ -40,7 +40,6 @@ const ItemCard = (props: editListProps) => {
     expiry_date,
     item,
     onExpiryDateChange,
-    setIsItemChanged,
   } = props;
 
   const currentDate = Date.now();
@@ -53,7 +52,7 @@ const ItemCard = (props: editListProps) => {
   const [newDaysToExpire, setNewDaysToExpire] = useState(
     daysToExpire.toString()
   );
-  const [isDeleted, setIsDeleted] = useState(false);
+  const [itemStatus, setItemStatus] = useState("active");
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
   const [hasBeenChanged, setHasBeenChanged] = useState(false);
@@ -61,14 +60,12 @@ const ItemCard = (props: editListProps) => {
   const [updatedExpiryDate, setUpdatedExpiryDate] = useState(
     item.expiry_date.toString()
   );
-  
 
-if (hasBeenChanged === true){
-  if (Number(newDaysToExpire) === currentDaysToExpire) {
-    setHasBeenChanged(false);
+  if (hasBeenChanged === true) {
+    if (Number(newDaysToExpire) === currentDaysToExpire) {
+      setHasBeenChanged(false);
+    }
   }
-}
-  
 
   function editExpiryDate(change: number) {
     setNewDaysToExpire((Number(newDaysToExpire) + change).toString());
@@ -77,24 +74,63 @@ if (hasBeenChanged === true){
     const newDate = new Date(
       expiryDateToChange.setDate(expiryDateToChange.getDate() + change)
     );
-
     setUpdatedExpiryDate(newDate.toString());
-
-
-
     setHasBeenChanged(true);
+  }
 
+  function handleItemStatusChange(status: string) {
+    const updatedItem = { item_status: status };
+    patchItemById(item.item_id, updatedItem).catch((error) => {
+      setItemStatus("active");
+      setError(error.response.data.msg);
+      setIsError(true);
+    });
+  }
+
+  function handleItemUsage() {
+    Alert.alert(
+      "Please select an option",
+      undefined,
+      [
+        {
+          text: "Item Consumed",
+          onPress: () => {
+            handleItemStatusChange("USED");
+            setItemStatus("used");
+          },
+        },
+        {
+          text: "Item Binned",
+          onPress: () => {
+            handleItemStatusChange("TRASHED");
+            setItemStatus("trashed");
+          },
+        },
+        {
+          text: "Remove Item From List",
+          onPress: () => {
+            handleDeleteItem();
+          },
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
   }
 
   function handleDeleteItem() {
     deleteItem(item.item_id)
       .then((data) => {
-        setIsDeleted(true);
+        setItemStatus("deleted");
         setIsError(false);
-        setIsItemChanged(true);
       })
       .catch((error) => {
-        setIsDeleted(false);
+        setItemStatus("active");
         setError(error.response.data.msg);
         setIsError(true);
       });
@@ -126,10 +162,22 @@ if (hasBeenChanged === true){
     setHasBeenChanged(true);
   }
 
-  if (isDeleted)
+  if (itemStatus === "deleted")
     return (
       <View className="flex-row px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-2 flex-wrap">
         <Text className="text-white">Item has been deleted</Text>
+      </View>
+    );
+  if (itemStatus === "used")
+    return (
+      <View className="flex-row px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-2 flex-wrap">
+        <Text className="text-white">Item has been consumed</Text>
+      </View>
+    );
+  if (itemStatus === "trashed")
+    return (
+      <View className="flex-row px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-2 flex-wrap">
+        <Text className="text-white">Item has been thrown away</Text>
       </View>
     );
 
@@ -137,7 +185,7 @@ if (hasBeenChanged === true){
     <View>
       <View className="flex-row justify-between px-4 py-1 bg-white rounded-2xl shadow-md mx-2 my-2 flex-wrap">
         <View className="flex-row gap-1 items-center ">
-          <TouchableOpacity onPress={handleDeleteItem}>
+          <TouchableOpacity onPress={handleItemUsage}>
             <AntDesign name="delete" size={30} color="red" />
             {/* <MaterialIcons name="delete-forever" size={35} color="red" /> */}
           </TouchableOpacity>
