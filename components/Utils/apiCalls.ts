@@ -9,6 +9,9 @@ export const getAllItemsByHomeId = () => {
 };
 
 export const postItemByHomeId = (newItem: object) => {
+  console.log("====================================");
+  console.log(newItem, "<<< newItem");
+  console.log("====================================");
   return axios
     .post("https://stay-fresh.onrender.com/api/homes/1/items", newItem)
     .then(({ data }) => {
@@ -34,7 +37,7 @@ export const deleteItem = (item_id: number) => {
 export const getHomeName = () => {
   return axios
     .get("https://stay-fresh.onrender.com/api/homes")
-.then(({ data }) => {
+    .then(({ data }) => {
       return data;
     });
 };
