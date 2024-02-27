@@ -54,15 +54,98 @@ const Profile = () => {
     );
   };
 
-  const barData = [
-    { value: 30, label: "M", frontColor: "#3BB566" },
-    { value: 23, label: "T", frontColor: "#3BB566" },
-    { value: 5, label: "W", frontColor: "#3BB566" },
-    { value: 7, label: "T", frontColor: "#3BB566" },
-    { value: 15, label: "F", frontColor: "#3BB566" },
-    { value: 5, label: "S", frontColor: "#3BB566" },
-    { value: 5, label: "S", frontColor: "#3BB566" },
+  const barData: { value: number; label: string; frontColor: string }[] = [
+    { value: 30, label: "Mon", frontColor: "#3BB566" },
+    { value: 23, label: "Tue", frontColor: "#3BB566" },
+    { value: 5, label: "Wed", frontColor: "#3BB566" },
+    { value: 7, label: "Thu", frontColor: "#3BB566" },
+    { value: 15, label: "Fri", frontColor: "#3BB566" },
+    { value: 5, label: "Sat", frontColor: "#3BB566" },
+    { value: 5, label: "Sun", frontColor: "#3BB566" },
   ];
+
+  const items: {
+    item_name: string;
+    item_price: number;
+    purchase_date: string;
+    expiry_date: string;
+    home_id: number;
+    item_status?: string;
+  }[] = [
+    {
+      item_name: "Milk",
+      item_price: 155,
+      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
+      expiry_date: "Tue Feb 27 2024 19:33:50 GMT+0100",
+      home_id: 1,
+      item_status: "ACTIVE",
+    },
+
+    {
+      item_name: "Cornflakes",
+      item_price: 400,
+      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
+      expiry_date: "Sat Mar 30 2024 19:33:50 GMT+0100",
+      home_id: 1,
+      item_status: "USED",
+    },
+    {
+      item_name: "Bread",
+      item_price: 195,
+      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
+      expiry_date: "Thur Feb 29 2024 19:33:50 GMT+0100",
+      home_id: 1,
+      item_status: "TRASHED",
+    },
+    {
+      item_name: "Eggs",
+      item_price: 95,
+      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
+      expiry_date: "Tue Mar 5 2024 19:33:50 GMT+0100",
+      home_id: 1,
+      item_status: "USED",
+    },
+    {
+      item_name: "Carrots",
+      item_price: 45,
+      purchase_date: "Sun Feb 18 2024 19:33:50 GMT+0100",
+      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
+      home_id: 2,
+      item_status: "TRASHED",
+    },
+    {
+      item_name: "Potatoes",
+      item_price: 110,
+      purchase_date: "Sun Feb 18 2024 19:33:50 GMT+0100",
+      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
+      home_id: 2,
+      item_status: "USED",
+    },
+    {
+      item_name: "Bread",
+      item_price: 110,
+      purchase_date: "Fri Mar 15 2024 19:33:50 GMT+0100",
+      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
+      home_id: 2,
+      item_status: "USED",
+    },
+  ];
+
+  const updateBarData = () => {
+    const dayOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    items.forEach((item) => {
+      const purchaseDayIndex = new Date(item.purchase_date).getDay();
+      // console.log(purchaseDayIndex, "<== purchase day index");
+
+      const purchaseDay = dayOfTheWeek[purchaseDayIndex];
+      // console.log(purchaseDay, "<=== purchaseDay");
+
+      const foundDay = barData.find((dayItem) => dayItem.label === purchaseDay);
+      console.log(foundDay, "<==== found day");
+      foundDay.value = item.item_price;
+      console.log(foundDay["value"]);
+    });
+  };
 
   return (
     <View className="flex-1 items-center bg-gray-100">
@@ -145,6 +228,7 @@ const Profile = () => {
             delay={500}
           />
         </View>
+        <Text> {updateBarData()}</Text>
       </ScrollView>
     </View>
   );
