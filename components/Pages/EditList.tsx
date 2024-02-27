@@ -63,7 +63,7 @@ const EditList = ({ route }: any) => {
                 item={item}
                 currentList={currentList}
                 setCurrentList={setCurrentList}
-                setIsItemChanged={setIsItemChanged}
+                // setIsItemChanged={setIsItemChanged}
                 onExpiryDateChange={(newExpiryDate) => {
                   handleExpiryDateChange(index, newExpiryDate);
                 }}
@@ -73,18 +73,6 @@ const EditList = ({ route }: any) => {
         }}
         ListFooterComponent={<View style={{ height: 20 }} />}
       />
-      {isItemChanged && (
-        <View>
-          <Text className="text-lg p-2 text-center font-bold text-red-500 ">
-            Your list has been changed
-          </Text>
-          <TouchableOpacity className="bg-green-700 p-3" onPress={saveNewList}>
-            <Text className="text-xl text-center font-bold text-white">
-              Save Changes
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };
