@@ -28,7 +28,6 @@ interface editListProps {
   setCurrentList: (arg: object[]) => void;
   item_name: string;
   expiry_date: number;
-  setIsItemChanged: (arg: boolean) => void;
   item: { item_name: string; expiry_date: number; item_id: number };
   onExpiryDateChange: (arg: number) => void;
 }
@@ -41,7 +40,6 @@ const ItemCard = (props: editListProps) => {
     expiry_date,
     item,
     onExpiryDateChange,
-    setIsItemChanged,
   } = props;
 
   const currentDate = Date.now();
@@ -130,7 +128,6 @@ const ItemCard = (props: editListProps) => {
       .then((data) => {
         setItemStatus("deleted");
         setIsError(false);
-        setIsItemChanged(true);
       })
       .catch((error) => {
         setItemStatus("active");

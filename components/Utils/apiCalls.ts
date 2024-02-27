@@ -1,8 +1,10 @@
 import axios from "axios";
 
-export const getAllItemsByHomeId = () => {
+export const getAllItemsByHomeId = (status: string) => {
   return axios
-    .get("https://stay-fresh.onrender.com/api/homes/1/items")
+    .get("https://stay-fresh.onrender.com/api/homes/1/items", {
+      params: { item_status: status },
+    })
     .then((data) => {
       return data;
     });

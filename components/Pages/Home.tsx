@@ -39,7 +39,7 @@ const Home = ({ route }: any) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isFocused) {
-      getAllItemsByHomeId()
+      getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
           setIsLoading(false);
@@ -54,7 +54,7 @@ const Home = ({ route }: any) => {
 
   useEffect(() => {
     if (itemToAdd !== undefined) {
-      getAllItemsByHomeId()
+      getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
           setIsLoading(false);
