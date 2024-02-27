@@ -13,7 +13,6 @@ const ItemCard = ({ item_name, expiryDate, purchaseDate }: ItemProp) => {
   let numDaysRemaining = Number(formattedExpiryDate) - currentDate;
   numDaysRemaining = Math.floor(numDaysRemaining / 1000 / 60 / 60 / 24) + 1;
   const percentageShelfLifeRemaining = numDaysRemaining / totalShelfLife;
-  console.log(percentageShelfLifeRemaining, "----", item_name);
 
   if (numDaysRemaining <= 2 || percentageShelfLifeRemaining <= 0.05)
     return (
