@@ -38,18 +38,37 @@ const EditList = ({ route }: any) => {
   }
   return (
     <View className="flex-1">
-      <Text
-        style={{
-          fontSize: 20,
-          textAlign: "center",
-          paddingBottom: 10,
-          backgroundColor: "white",
-          fontWeight: "bold",
-        }}
-      >
-        Edit Your List
-      </Text>
-
+      <View className="border-b-2 border-green-400">
+        <Text
+          style={{
+            fontSize: 20,
+            textAlign: "center",
+            paddingBottom: 10,
+            backgroundColor: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Edit Your List
+        </Text>
+      </View>
+      <View style={styles.ItemListHeading}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          Item Name
+        </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          Expires in
+        </Text>
+      </View>
       <FlatList
         scrollEnabled={true}
         className="pt-2 bg-green-400 pb-2 rounded-b-xl"
@@ -84,5 +103,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding: 23,
     flex: 1,
+  },
+  ItemListHeading: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderBottomColor: "#ccc",
+    backgroundColor: "white",
   },
 });
