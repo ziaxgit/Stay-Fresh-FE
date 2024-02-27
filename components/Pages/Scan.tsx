@@ -275,7 +275,9 @@ export default function Scan() {
                 className="flex-row justify-center"
               >
                 <View className="bg-green-700 p-3 rounded-full">
-                  <Text className="text-white text-base">Analyse Receipt</Text>
+                  <Text className="text-white text-base font-medium">
+                    Analyse Receipt
+                  </Text>
                 </View>
               </TouchableOpacity>
             )}

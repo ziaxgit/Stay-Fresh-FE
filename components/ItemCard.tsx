@@ -16,9 +16,11 @@ const ItemCard = ({ item_name, expiryDate, purchaseDate }: ItemProp) => {
 
   if (numDaysRemaining <= 2 || percentageShelfLifeRemaining <= 0.05)
     return (
-      <View className="flex-row justify-between items-center px-4 py-2 bg-white border-4 border-red-600 rounded-2xl shadow-md mx-2 my-2">
-        <Text className="text-xl font-normal">{item_name}</Text>
-        <Text className="text-xl font-normal">{numDaysRemaining} days</Text>
+      <View className="flex-row justify-between items-center px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-1">
+        <Text className="text-lg font-medium text-white">{item_name}</Text>
+        <Text className="text-lg font-medium text-white">
+          {numDaysRemaining} days
+        </Text>
       </View>
     );
   else if (
@@ -27,16 +29,20 @@ const ItemCard = ({ item_name, expiryDate, purchaseDate }: ItemProp) => {
     (numDaysRemaining > 2 && numDaysRemaining <= 4)
   )
     return (
-      <View className="flex-row justify-between items-center px-4 py-2 bg-white border-4 border-yellow-300 rounded-2xl shadow-md mx-2 my-2">
-        <Text className="text-xl font-normal">{item_name}</Text>
-        <Text className="text-xl font-normal">{numDaysRemaining} days</Text>
+      <View className="flex-row justify-between items-center px-4 py-2 bg-amber-500 rounded-2xl shadow-md mx-2 my-1">
+        <Text className="text-lg font-medium text-white">{item_name}</Text>
+        <Text className="text-lg font-medium text-white">
+          {numDaysRemaining} days
+        </Text>
       </View>
     );
   else
     return (
-      <View className="flex-row justify-between items-center px-4 py-2 bg-white border-4 border-green-700 rounded-2xl shadow-md mx-2 my-2">
-        <Text className="text-xl font-normal">{item_name}</Text>
-        <Text className="text-xl font-normal">{numDaysRemaining} days</Text>
+      <View className="flex-row justify-between items-center px-4 py-2 bg-green-700 rounded-2xl shadow-md mx-2 my-1">
+        <Text className="text-lg font-medium text-white">{item_name}</Text>
+        <Text className="text-lg font-medium text-white">
+          {numDaysRemaining} days
+        </Text>
       </View>
     );
 };

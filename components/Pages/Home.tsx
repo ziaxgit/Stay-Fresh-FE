@@ -14,7 +14,7 @@ import {
 } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { getAllItemsByHomeId} from "../Utils/apiCalls";
+import { getAllItemsByHomeId } from "../Utils/apiCalls";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
@@ -39,7 +39,6 @@ const Home = ({ route }: any) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isFocused) {
-
       getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
@@ -55,7 +54,6 @@ const Home = ({ route }: any) => {
 
   useEffect(() => {
     if (itemToAdd !== undefined) {
-
       getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
@@ -77,6 +75,7 @@ const Home = ({ route }: any) => {
         </Text>
         <View className="border-b-2 border-green-400 rounded-b-md ">
           <Text
+            className="text-gray-600"
             style={{
               fontSize: 20,
               textAlign: "center",
@@ -90,6 +89,7 @@ const Home = ({ route }: any) => {
         </View>
         <View style={styles.ItemListHeading}>
           <Text
+            className="text-gray-600"
             style={{
               fontSize: 18,
               fontWeight: "bold",
@@ -98,6 +98,7 @@ const Home = ({ route }: any) => {
             Item Name
           </Text>
           <Text
+            className="text-gray-600"
             style={{
               fontSize: 18,
               fontWeight: "bold",
@@ -123,7 +124,7 @@ const Home = ({ route }: any) => {
       </View>
       <View className="flex flex-row justify-around my-2">
         <TouchableOpacity
-          className="rounded-full bg-green-700 px-3 py-2"
+          className="rounded-full bg-gray-700 px-3 py-2"
           onPress={() => {
             navigation.navigate("AddItem");
           }}
@@ -136,7 +137,7 @@ const Home = ({ route }: any) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-orange-500 rounded-full px-3 py-2"
+          className="bg-amber-800 rounded-full px-3 py-2"
           onPress={() => {
             navigation.navigate("EditList", { currentList, setCurrentList });
           }}
@@ -159,9 +160,8 @@ const styles = StyleSheet.create({
   ItemListHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 15,
-    borderBottomColor: "#ccc",
     backgroundColor: "white",
   },
 });

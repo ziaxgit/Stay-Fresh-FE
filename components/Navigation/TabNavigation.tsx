@@ -17,9 +17,13 @@ export default function TabNavigation() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarShowLabel: true,
+        tabBarStyle: {},
+        tabBarActiveTintColor: "#15bb53",
         tabBarStyle: {
-          padding: 10,
+          // backgroundColor: "#7d7d7d",
+          // borderTopLeftRadius: 30,
+          // borderTopRightRadius: 30,
+          paddingBottom: 20,
         },
       }}
     >
@@ -28,7 +32,7 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" color={color} size={28} />
+            <Ionicons name="home" color={color} size={30} />
           ),
           unmountOnBlur: true, //resets stack
         }}
@@ -39,7 +43,7 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Scan",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="document-scanner" color={color} size={28} />
+            <MaterialIcons name="document-scanner" color={color} size={35} />
           ),
           unmountOnBlur: true,
         }}
@@ -50,7 +54,7 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Recipes",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="food-bank" color={color} size={28} />
+            <MaterialIcons name="food-bank" color={color} size={40} />
           ),
           unmountOnBlur: true,
         }}
@@ -61,7 +65,7 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="user" color={color} size={28} />
+            <FontAwesome name="user" color={color} size={35} />
           ),
           unmountOnBlur: true, //resets stack
         }}
