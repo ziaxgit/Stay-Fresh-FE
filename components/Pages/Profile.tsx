@@ -182,7 +182,7 @@ const Profile = () => {
           <Image
             className="rounded-full w-24 h-24 mb-4 mx-5"
             source={{
-              uri: "https://ca.slack-edge.com/T01KPE0QGCD-U066BE21ALW-g582122507ca-512",
+              uri: "https://kottke.org/plus/misc/images/ai-faces-01.jpg",
             }}
           />
           <View className="flex-col">
@@ -209,9 +209,7 @@ const Profile = () => {
       </View>
       <ScrollView>
         <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
-          <Text className="text-3xl mb-3 font-bold  text-center">
-            Statistics
-          </Text>
+          <Text className="text-2xl mb-3 font-bold  text-center">Insights</Text>
           <View className="flex-row justify-between mb-6">
             {pieData[0].value > 0 ? (
               <PieChart
@@ -224,7 +222,7 @@ const Profile = () => {
                 centerLabelComponent={() => (
                   <Text className="text-center">
                     <Text className="font-semibold text-gray-700">
-                      Monthly spent:{" "}
+                      Monthly spend:
                     </Text>
                     <Text className="font-semibold text-gray-900 ">
                       £{(totalSaved + totalLost).toFixed(2)}
