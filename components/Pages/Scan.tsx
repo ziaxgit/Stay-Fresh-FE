@@ -101,8 +101,8 @@ export default function Scan() {
       // un comment the above after done testing
       setItemsByAi([...parsedData]);
     } catch (error) {
-      console.error("Error analysing image: ", error);
-      alert("Error analysing image. Please try again later.");
+      console.error("There was an issue: ", error);
+      alert(error);
     }
   };
 
@@ -132,6 +132,7 @@ export default function Scan() {
               style: "cancel",
               onPress: () => {
                 setAlertShown(true);
+                // navigatoration.goBack(); working on this
               },
             },
           ],
