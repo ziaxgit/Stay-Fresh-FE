@@ -9,12 +9,40 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarChart, PieChart } from "react-native-gifted-charts";
-import { getUserNameByHomeId, getHomeName } from "../Utils/apiCalls";
-
+import {
+  getUserNameByHomeId,
+  getHomeName,
+  getAllItemsByHomeId,
+} from "../Utils/apiCalls";
 const Profile = () => {
   const [userName, setUserName] = useState("");
   const [homeName, setHomeName] = useState("");
   const [isError, setIsError] = useState(false);
+  const [barData, setBarData] = useState([
+    { value: 0, label: "Sun", frontColor: "#3BB566" },
+    { value: 0, label: "Mon", frontColor: "#3BB566" },
+    { value: 0, label: "Tue", frontColor: "#3BB566" },
+    { value: 0, label: "Wed", frontColor: "#3BB566" },
+    { value: 0, label: "Thu", frontColor: "#3BB566" },
+    { value: 0, label: "Fri", frontColor: "#3BB566" },
+    { value: 0, label: "Sat", frontColor: "#3BB566" },
+  ]);
+  const [pieData, setPieData] = useState([
+    { value: 0, color: "#3BB566" },
+    { value: 0, color: "#D3D3D3" },
+  ]);
+  let [totalSaved, setTotalSaved] = useState(0);
+  let [totalLost, setTotalLost] = useState(0);
+  interface ItemState {
+    item_name: string;
+    item_price: number;
+    purchase_date: string;
+    expiry_date: string;
+    home_id: number;
+    item_status?: string;
+  }
+
+  const [items, setItems] = useState<ItemState[]>([]);
 
   useEffect(() => {
     getUserNameByHomeId()
@@ -25,7 +53,6 @@ const Profile = () => {
       .catch(() => {
         setIsError(true);
       });
-
     getHomeName()
       .then(({ homes }) => {
         setHomeName(homes[0].home_name);
@@ -33,12 +60,19 @@ const Profile = () => {
       .catch(() => {
         setIsError(true);
       });
-  }, []);
 
-  const data = [
-    { value: 20, color: "#D3D3D3" },
-    { value: 50, color: "#3BB566" },
-  ];
+    Promise.all([
+      getAllItemsByHomeId("USED"),
+      getAllItemsByHomeId("TRASHED"),
+    ]).then((result) => {
+      const [usedData, trashedData] = result;
+      const usedItems = usedData.data.items;
+      const trashedItems = trashedData.data.items;
+      const mergedItems = [...usedItems, ...trashedItems];
+
+      setItems(mergedItems);
+    });
+  }, []);
 
   const renderDot = (color: string) => {
     return (
@@ -53,99 +87,92 @@ const Profile = () => {
       />
     );
   };
-
-  const barData: { value: number; label: string; frontColor: string }[] = [
-    { value: 30, label: "Mon", frontColor: "#3BB566" },
-    { value: 23, label: "Tue", frontColor: "#3BB566" },
-    { value: 5, label: "Wed", frontColor: "#3BB566" },
-    { value: 7, label: "Thu", frontColor: "#3BB566" },
-    { value: 15, label: "Fri", frontColor: "#3BB566" },
-    { value: 5, label: "Sat", frontColor: "#3BB566" },
-    { value: 5, label: "Sun", frontColor: "#3BB566" },
-  ];
-
-  const items: {
-    item_name: string;
-    item_price: number;
-    purchase_date: string;
-    expiry_date: string;
-    home_id: number;
-    item_status?: string;
-  }[] = [
-    {
-      item_name: "Milk",
-      item_price: 155,
-      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
-      expiry_date: "Tue Feb 27 2024 19:33:50 GMT+0100",
-      home_id: 1,
-      item_status: "ACTIVE",
-    },
-
-    {
-      item_name: "Cornflakes",
-      item_price: 400,
-      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
-      expiry_date: "Sat Mar 30 2024 19:33:50 GMT+0100",
-      home_id: 1,
-      item_status: "USED",
-    },
-    {
-      item_name: "Bread",
-      item_price: 195,
-      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
-      expiry_date: "Thur Feb 29 2024 19:33:50 GMT+0100",
-      home_id: 1,
-      item_status: "TRASHED",
-    },
-    {
-      item_name: "Eggs",
-      item_price: 95,
-      purchase_date: "Tue Feb 20 2024 19:33:50 GMT+0100",
-      expiry_date: "Tue Mar 5 2024 19:33:50 GMT+0100",
-      home_id: 1,
-      item_status: "USED",
-    },
-    {
-      item_name: "Carrots",
-      item_price: 45,
-      purchase_date: "Sun Feb 18 2024 19:33:50 GMT+0100",
-      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
-      home_id: 2,
-      item_status: "TRASHED",
-    },
-    {
-      item_name: "Potatoes",
-      item_price: 110,
-      purchase_date: "Sun Feb 18 2024 19:33:50 GMT+0100",
-      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
-      home_id: 2,
-      item_status: "USED",
-    },
-    {
-      item_name: "Bread",
-      item_price: 110,
-      purchase_date: "Fri Mar 15 2024 19:33:50 GMT+0100",
-      expiry_date: "Tue Mar 19 2024 19:33:50 GMT+0100",
-      home_id: 2,
-      item_status: "USED",
-    },
-  ];
-
   const updateBarData = () => {
+    const currentDate = new Date();
+    const first = currentDate.getDate() - currentDate.getDay();
+    const last = first + 6;
+    const firstDayOfTheWeek = new Date(currentDate.setDate(first));
+    const lastDayOfTheWeek = new Date(currentDate.setDate(last));
+
     const dayOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const updatedBarData = [...barData];
+    updatedBarData.map((data) => {
+      data.value = 0;
+    });
+
     items.forEach((item) => {
       const purchaseDayIndex = new Date(item.purchase_date).getDay();
-      // console.log(purchaseDayIndex, "<== purchase day index");
 
       const purchaseDay = dayOfTheWeek[purchaseDayIndex];
-      // console.log(purchaseDay, "<=== purchaseDay");
 
-      const foundDay = barData.find((dayItem) => dayItem.label === purchaseDay);
-      console.log(foundDay, "<==== found day");
-      foundDay.value = item.item_price;
-      console.log(foundDay["value"]);
+      const purchaseDate = new Date(item.purchase_date);
+
+      if (
+        purchaseDate >= firstDayOfTheWeek &&
+        purchaseDate <= lastDayOfTheWeek &&
+        item.item_status === "USED"
+      ) {
+        const foundDay = updatedBarData.find(
+          (dayItem) => dayItem.label === purchaseDay
+        );
+
+        if (foundDay) {
+          foundDay.value += item.item_price / 100;
+        }
+      }
     });
+
+    return updatedBarData;
   };
+
+  const updatePieData = () => {
+    const currentDate = new Date();
+    const firstDayOfTheMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const lastDayOfTheMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+    let totalSaved: number = 0;
+    let totalLost: number = 0;
+    if (items !== undefined) {
+      items.forEach((item) => {
+        const purchaseDate = new Date(item.purchase_date);
+        if (
+          purchaseDate >= firstDayOfTheMonth &&
+          purchaseDate <= lastDayOfTheMonth &&
+          item.item_status === "USED"
+        ) {
+          totalSaved += Number(item.item_price) / 100;
+        } else if (
+          purchaseDate >= firstDayOfTheMonth &&
+          purchaseDate <= lastDayOfTheMonth &&
+          item.item_status === "TRASHED"
+        ) {
+          totalLost += Number(item.item_price) / 100;
+        }
+      });
+    }
+
+    setTotalSaved(totalSaved);
+    setTotalLost(totalLost);
+    pieData[0].value = totalSaved;
+    pieData[1].value = totalLost;
+
+    return pieData;
+  };
+
+  useEffect(() => {
+    const newBarData = updateBarData();
+    setBarData(newBarData);
+    const Pie = updatePieData();
+
+    setPieData(Pie);
+  }, [items]);
 
   return (
     <View className="flex-1 items-center bg-gray-100">
@@ -182,41 +209,52 @@ const Profile = () => {
       </View>
       <ScrollView>
         <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
-          <Text className="text-3xl mb-4 font-bold text-400 text-center">
+          <Text className="text-3xl mb-3 font-bold  text-center">
             Statistics
           </Text>
           <View className="flex-row justify-between mb-6">
-            <PieChart
-              className="rounded-lg w-1/2"
-              donut
-              data={data}
-              textSize={20}
-              innerRadius={50}
-              radius={60}
-              centerLabelComponent={() => (
-                <Text className="text-center">
-                  <Text className="font-semibold text-gray-700">
-                    Total spent:{" "}
+            {pieData[0].value > 0 ? (
+              <PieChart
+                donut
+                data={pieData}
+                textColor="black"
+                textSize={20}
+                innerRadius={50}
+                radius={60}
+                centerLabelComponent={() => (
+                  <Text className="text-center">
+                    <Text className="font-semibold text-gray-700">
+                      Monthly spent:{" "}
+                    </Text>
+                    <Text className="font-semibold text-gray-900 ">
+                      £{(totalSaved + totalLost).toFixed(2)}
+                    </Text>
                   </Text>
-                  <Text className="font-semibold text-gray-900 ">£50</Text>
-                </Text>
-              )}
-            />
+                )}
+              />
+            ) : (
+              <Text>LOading....</Text>
+            )}
+
             <View className="flex-col justify-center">
               <View className="flex items-center mb-2 flex-row">
                 {renderDot("#3BB566")}
                 <Text className="text-lg text-gray-900 ml-2">
-                  Saved: £37.50
+                  Saved: £{totalSaved.toFixed(2)}
                 </Text>
               </View>
               <View className="flex items-center flex-row">
                 {renderDot("#D3D3D3")}
-                <Text className="text-lg text-gray-900 ml-2">Lost: £12.50</Text>
+                <Text className="text-lg text-gray-900 ml-2">
+                  Lost: £{totalLost.toFixed(2)}
+                </Text>
               </View>
             </View>
           </View>
+          <Text className="text-lg mb-4 font-bold  text-center">
+            Weekly Stats
+          </Text>
           <BarChart
-            className="rounded-lg w-full"
             barWidth={22}
             noOfSections={3}
             barBorderRadius={4}
@@ -226,9 +264,24 @@ const Profile = () => {
             xAxisThickness={1}
             isAnimated
             delay={500}
+            renderTooltip={(item, index) => {
+              return (
+                <View
+                  style={{
+                    marginBottom: 5,
+                    marginLeft: -4,
+                    backgroundColor: "#D3D3D3",
+                    paddingHorizontal: 6,
+                    paddingVertical: 4,
+                    borderRadius: 4,
+                  }}
+                >
+                  <Text>{item.value.toFixed(2)}</Text>
+                </View>
+              );
+            }}
           />
         </View>
-        <Text> {updateBarData()}</Text>
       </ScrollView>
     </View>
   );

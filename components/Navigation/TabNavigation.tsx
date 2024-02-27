@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { Home, Scan, Profile } from "../Pages";
+import RecipesSelector from "../Pages/RecipesSelector";
 import React from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -43,6 +44,17 @@ export default function TabNavigation() {
           unmountOnBlur: true,
         }}
         component={Scan}
+      />
+      <Tab.Screen
+        name="Recipes"
+        options={{
+          tabBarLabel: "Recipes",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="food-bank" color={color} size={28} />
+          ),
+          unmountOnBlur: true,
+        }}
+        component={RecipesSelector}
       />
       <Tab.Screen
         name="Profile"

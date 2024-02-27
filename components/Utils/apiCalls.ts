@@ -48,3 +48,22 @@ export const patchItemById = (item_id: number, updatedItem: object) => {
       return response.data;
     });
 };
+
+export const getRecipes = () => {
+  return axios
+    .get("https://api.edamam.com/api/recipes/v2", {
+      params: {
+        type: "public",
+        q: "chicken",
+        app_id: process.env.EXPO_PUBLIC_EDAMAM_APP_ID,
+        app_key: process.env.EXPO_PUBLIC_EDAMAM_APP_KEY,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+
+
+

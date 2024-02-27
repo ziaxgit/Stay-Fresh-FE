@@ -14,7 +14,7 @@ import {
 } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { getAllItemsByHomeId } from "../Utils/apiCalls";
+import { getAllItemsByHomeId} from "../Utils/apiCalls";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
@@ -39,6 +39,7 @@ const Home = ({ route }: any) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isFocused) {
+
       getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
@@ -54,6 +55,7 @@ const Home = ({ route }: any) => {
 
   useEffect(() => {
     if (itemToAdd !== undefined) {
+
       getAllItemsByHomeId("active")
         .then(({ data }) => {
           setCurrentList(data.items);
