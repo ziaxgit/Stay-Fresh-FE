@@ -18,7 +18,7 @@ const ScannedItemCard = ({
 }: any) => {
   const { itemName, daysToExpiry, price } = eachItem;
   const [expiryDate, setExpiryDate] = useState(addDaysToDate(daysToExpiry));
-  const [finalPrice, setFinalPrice] = useState(price);
+  const [finalPrice, setFinalPrice] = useState(price || "");
   const [finalItemName, setFinalItemName] = useState(itemName);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -89,6 +89,7 @@ const ScannedItemCard = ({
       >
         <TextInput
           className="w-32"
+          placeholder="Item Name"
           value={String(finalItemName)}
           onChangeText={(newName) => {
             setFinalItemName(newName);
@@ -111,6 +112,7 @@ const ScannedItemCard = ({
         <TextInput
           className="w-10 text-center "
           value={String(finalPrice)}
+          placeholder="Price"
           onChangeText={(newPrice) => {
             setFinalPrice(newPrice);
             setIsValueChanged({

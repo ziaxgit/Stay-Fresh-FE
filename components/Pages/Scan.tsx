@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Image,
   View,
@@ -8,11 +8,12 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
-import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import axios from "axios";
 import OpenAI from "openai";
 import ScannedItemCard from "./ScannedItemCard";
 import { postItemByHomeId } from "../Utils/apiCalls";
@@ -33,7 +34,12 @@ export default function Scan() {
   const [showButton, setShowButton] = useState(true);
   const [deleteIndexes, setDeleteIndexes] = useState<number[]>([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
-  const [checkListLength, setCheckListLength] = useState(0);
+  const [addAnotherItem, setAddAnotherItem] = useState(false);
+  const [componentInstances, setComponentInstances] = useState([]);
+
+  const handleAddAnotherItem = () => {
+    setItemsByAi([...itemsByAi, { daysToExpiry: "", itemName: "", price: 0 }]);
+  };
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -107,16 +113,19 @@ export default function Scan() {
       //   ...[
       //     { daysToExpiry: 21, itemName: "Natural Yogurt", price: 0.7 },
       //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
+      //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
+      //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
+      //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
+      //     { daysToExpiry: 7, itemName: "Cherry Tomatoes", price: 1.29 },
       //     { daysToExpiry: 7, itemName: "Plum Tomatoes", price: 1.29 },
       //   ],
       // ]);
-      setCheckListLength(parsedData.length);
+      // use this data for testing purposes
     } catch (error) {
       console.error("There was an issue: ", error);
       alert(error);
     }
   };
-
 
   useFocusEffect(
     React.useCallback(() => {
@@ -185,10 +194,19 @@ export default function Scan() {
   };
 
   const handleSave = async () => {
+    const finalItemsToPost = itemsByAi.filter(
+      (_, index) => !deleteIndexes.includes(index)
+    );
+
     try {
-      const finalItemsToPost = itemsByAi.filter(
-        (_, index) => !deleteIndexes.includes(index)
-      );
+      finalItemsToPost.forEach((item: any) => {
+        if (item.item_name === "") {
+          throw new Error(
+            "Missing fields found. Please fill out all the fields."
+          );
+        }
+      });
+
       if (finalItemsToPost.length === 0) {
         setIsListEmpty(true);
       } else {
@@ -211,8 +229,7 @@ export default function Scan() {
         );
       }
     } catch (error) {
-      console.error("Error saving items: ", error);
-      alert("Error saving items. Please try again later.");
+      alert(error);
     }
   };
 
@@ -226,34 +243,42 @@ export default function Scan() {
       },
     ]);
   }
+  const scrollViewRef = useRef();
+
   return (
     <KeyboardAvoidingView
-      className="flex-1"
-      behavior="padding"
-      keyboardVerticalOffset={100}
+      className="flex-1 h-full"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={115}
     >
-      <ScrollView className="">
-        {showButton && image && (
+      <ScrollView
+        ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({ animated: true })
+        }
+      >
+        {image && (
           <View>
             <Image
-              source={{ uri: image }}
+              source={image ? { uri: image } : undefined}
               style={{
-                width: 400,
+                flex: 1,
                 height: 400,
-                marginTop: -10,
                 marginBottom: 10,
+                marginTop: -3,
                 resizeMode: "contain",
               }}
             />
-
-            <TouchableOpacity
-              onPress={analyseImage}
-              className="flex-row justify-center"
-            >
-              <View className="bg-green-700 p-3 rounded-full">
-                <Text className="text-white text-base">Analyse Receipt</Text>
-              </View>
-            </TouchableOpacity>
+            {image && showButton && (
+              <TouchableOpacity
+                onPress={analyseImage}
+                className="flex-row justify-center"
+              >
+                <View className="bg-green-700 p-3 rounded-full">
+                  <Text className="text-white text-base">Analyse Receipt</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         )}
         {isLoading === true && (
@@ -263,12 +288,14 @@ export default function Scan() {
           </View>
         )}
         {isLoading === false && (
-          <View className="mt-2">
-            <Text className="text-base mx-6 leading-5 text-center">
-              We found the following food items from your receipt. Please note
-              the expiry day is only an estimate. Add or remove items and adjust
-              expiry day as appropriate.
-            </Text>
+          <View className="">
+            <View className="bg-amber-200 rounded-t-3xl p-2 ">
+              <Text className="text-base mx-5 leading-5 text-center">
+                We found the following food items from your receipt. Please note
+                the expiry day is only an estimate. Add or remove items and
+                adjust expiry day as appropriate.
+              </Text>
+            </View>
             <View className="flex-row justify-between mx-4 mt-2">
               <Text className="text-base font-medium ml-9">Item Name</Text>
               <Text className="text-base font-medium ml-9">Price</Text>
@@ -285,9 +312,25 @@ export default function Scan() {
                 />
               );
             })}
+
+            {componentInstances.map((instance, index) => (
+              <View key={index}>{instance}</View>
+            ))}
+
             {!isListEmpty && (
               <TouchableOpacity
-                className="mt-2 mb-2 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
+                className="mt-2 mb-2 flex-row justify-center bg-gray-700 p-1 rounded-full mx-2"
+                onPress={handleAddAnotherItem}
+              >
+                <Text className="text-white text-lg font-medium">
+                  Add another item
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {!isListEmpty && (
+              <TouchableOpacity
+                className="mb-2 flex-row justify-center bg-green-700 p-1 rounded-full mx-2"
                 onPress={handleSave}
               >
                 <Text className="text-white text-lg font-medium">Save</Text>
@@ -298,7 +341,7 @@ export default function Scan() {
         {!image && (
           <Text
             style={{ textAlign: "center", margin: 25 }}
-            className="text-lg "
+            className="text-xl mx-8 font-medium text-gray-700"
           >
             Seamlessly scan your receipts using latest Google Cloud Vision and
             OpenAI GPT-4 technology
