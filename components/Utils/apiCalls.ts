@@ -68,8 +68,8 @@ export const postNotification = () => {
   const body = {
     appId: 19886,
     appToken: "XyPpv0RDBMlSVdjdRZ2Lz8",
-    title: `Items Expiring Soon`,
-    body: `Please check your list you have items expirying soon`,
+    title: `StayFresh: Items Expiring Soon`,
+    body: `Please check your list you have items expiring soon`,
     dateSent: Date.now(),
   };
   return axios
