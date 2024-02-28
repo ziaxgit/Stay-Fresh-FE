@@ -186,12 +186,12 @@ const Profile = () => {
   };
 
   return (
-    <View className="flex-1 items-center bg-gray-100">
-      <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center mb-5">
-        <Text className="text-xl mb-4 font-bold ">Profile</Text>
+    <ScrollView className="flex-1 items- bg-gray-100 mx-2">
+      <View className="bg-white rounded-lg pt-3 shadow-lg items-center mb-2 mt-2">
+        {/* <Text className="text-xl mb-4 font-bold ">Profile</Text> */}
         <View className="flex-row">
           <Image
-            className="rounded-full w-24 h-24 mb-4 mx-5"
+            className="rounded-full w-24 h-24 mb-4 mx-4"
             source={{
               uri: "https://kottke.org/plus/misc/images/ai-faces-01.jpg",
             }}
@@ -218,16 +218,18 @@ const Profile = () => {
           </View>
         </View>
         <TouchableOpacity
-          className="rounded-full bg-green-600 px-3 py-2 mb-4"
+          className="rounded-full bg-green-600  mb-2 px-20 ml-32  -mt-4"
           onPress={handleSignOut}
         >
-          <Text className="text-lg text-white font-medium ">Sign Out</Text>
+          <Text className="text-lg text-white font-medium text-center">
+            Sign Out
+          </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <View>
         <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
-          <Text className="text-xl font-bold  text-center">Insights</Text>
-          <View className="flex-row justify-between mb-6">
+          <Text className="text-xl font-bold text-center">Insights</Text>
+          <View className="flex-row justify-between mb-4">
             {pieData[0].value > 0 ? (
               <PieChart
                 donut
@@ -237,7 +239,7 @@ const Profile = () => {
                 innerRadius={50}
                 radius={60}
                 centerLabelComponent={() => (
-                  <View className="items-center justify-center">
+                  <View className="items-center">
                     <Text className="font-semibold text-gray-700">Monthly</Text>
                     <Text className="font-semibold text-gray-700">spend</Text>
                     <Text className="font-semibold text-gray-900 ">
@@ -271,37 +273,39 @@ const Profile = () => {
           <Text className="text-lg mb-4 font-bold  text-center">
             Weekly Stats
           </Text>
-          <BarChart
-            barWidth={22}
-            noOfSections={3}
-            barBorderRadius={4}
-            frontColor="black"
-            data={barData}
-            height={150}
-            yAxisThickness={0}
-            xAxisThickness={1}
-            isAnimated
-            delay={500}
-            renderTooltip={(item: any, index: any) => {
-              return (
-                <View
-                  style={{
-                    marginBottom: 5,
-                    marginLeft: -4,
-                    backgroundColor: "#D3D3D3",
-                    paddingHorizontal: 6,
-                    paddingVertical: 4,
-                    borderRadius: 4,
-                  }}
-                >
-                  <Text>£{item.value.toFixed(2)}</Text>
-                </View>
-              );
-            }}
-          />
+          <View className="mt-4">
+            <BarChart
+              barWidth={20}
+              noOfSections={3}
+              frontColor="black"
+              data={barData}
+              height={150}
+              yAxisThickness={1}
+              xAxisThickness={1}
+              isAnimated
+              delay={500}
+              renderTooltip={(item: any, index: any) => {
+                return (
+                  <View
+                    style={{
+                      marginBottom: 5,
+                      // marginTop: -15,
+                      marginLeft: -4,
+                      backgroundColor: "#D3D3D3",
+                      paddingHorizontal: 6,
+                      paddingVertical: 4,
+                      borderRadius: 4,
+                    }}
+                  >
+                    <Text>£{item.value.toFixed(2)}</Text>
+                  </View>
+                );
+              }}
+            />
+          </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
