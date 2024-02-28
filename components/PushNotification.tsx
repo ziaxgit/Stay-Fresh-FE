@@ -1,6 +1,8 @@
 import { Text } from "react-native-svg";
 import { postNotification } from "./Utils/apiCalls";
 import { useEffect, useState } from "react";
+import * as Notifications from "expo-notifications";
+
 type ItemProp = { item_name: string; expiryDate: number; purchaseDate: number };
 type ListProps = {
   currentList: {
@@ -11,6 +13,7 @@ type ListProps = {
 };
 const PushNotification = (props: ListProps) => {
   const [notify, setNotify] = useState(false);
+  const [time, setTime] = useState([]);
   props.currentList.map((item) => {
     const formattedPurchaseDate = Date.parse(item.purchase_date.toString());
     const currentDate = Date.now();
@@ -29,12 +32,40 @@ const PushNotification = (props: ListProps) => {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinutes = now.getMinutes();
-    console.log(currentHour, currentMinutes);
-    if (currentHour === 9 && currentMinutes === 0)
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Stay Fresh",
+        body: "Please check your list you have items expiring soon",
+      },
+      trigger: null,
+    });
+    if (currentHour === 12 && currentMinutes === 2) {
+      schedulePushNotification();
+    }
+    /* if (currentHour === 12 && currentMinutes === 2)
       postNotification().then((response) => {
         console.log(response);
-      });
+      }); */
   }, [notify]);
+
+  async function schedulePushNotification() {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: "Here is the notification body",
+        data: { data: "goes here" },
+      },
+      trigger: { seconds: 2 },
+    });
+  }
   return <></>;
 };
 
