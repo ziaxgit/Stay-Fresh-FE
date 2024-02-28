@@ -49,12 +49,12 @@ export const patchItemById = (item_id: number, updatedItem: object) => {
     });
 };
 
-export const getRecipes = () => {
+export const getRecipes = (ingreds: string) => {
   return axios
     .get("https://api.edamam.com/api/recipes/v2", {
       params: {
         type: "public",
-        q: "chicken",
+        q: ingreds,
         app_id: process.env.EXPO_PUBLIC_EDAMAM_APP_ID,
         app_key: process.env.EXPO_PUBLIC_EDAMAM_APP_KEY,
       },
@@ -63,6 +63,7 @@ export const getRecipes = () => {
       return response.data;
     });
 };
+<<<<<<< HEAD
 
 export const postNotification = () => {
   const body = {
@@ -78,3 +79,5 @@ export const postNotification = () => {
       return response;
     });
 };
+=======
+>>>>>>> d27dfc1a2f0a01a991fc4acd6fa9a6e105038f6a
