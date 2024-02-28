@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarChart, PieChart } from "react-native-gifted-charts";
@@ -231,7 +232,10 @@ const Profile = () => {
                 )}
               />
             ) : (
-              <Text>LOading....</Text>
+              <View className="items-center gap-2">
+                <ActivityIndicator size={"large"} color={"red"} />
+                <Text className="text-lg">Loading chartW...</Text>
+              </View>
             )}
 
             <View className="flex-col justify-center">
@@ -274,7 +278,7 @@ const Profile = () => {
                     borderRadius: 4,
                   }}
                 >
-                  <Text>{item.value.toFixed(2)}</Text>
+                  <Text>£{item.value.toFixed(2)}</Text>
                 </View>
               );
             }}
