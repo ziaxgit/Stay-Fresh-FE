@@ -18,6 +18,8 @@ import { getAllItemsByHomeId } from "../Utils/apiCalls";
 export type RootStackParamList = {
   Home: { itemToAdd?: {} };
   AddItem: undefined;
+  SignUp: undefined;
+  LogIn: undefined;
   EditList: {
     currentList: { name: string; expiryDate: number }[];
     setCurrentList: (
