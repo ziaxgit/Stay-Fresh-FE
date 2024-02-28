@@ -21,14 +21,19 @@ const PushNotification = (props: ListProps) => {
     let numDaysRemaining = Number(formattedExpiryDate) - currentDate;
     numDaysRemaining = Math.floor(numDaysRemaining / 1000 / 60 / 60 / 24) + 1;
 
-    if (numDaysRemaining <= 2) {
+    if (numDaysRemaining <= 2 && notify === false) {
       setNotify(true);
     }
   });
   useEffect(() => {
-    postNotification().then((response) => {
-      console.log(response);
-    });
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinutes = now.getMinutes();
+    console.log(currentHour, currentMinutes);
+    if (currentHour === 9 && currentMinutes === 0)
+      postNotification().then((response) => {
+        console.log(response);
+      });
   }, [notify]);
   return <></>;
 };
