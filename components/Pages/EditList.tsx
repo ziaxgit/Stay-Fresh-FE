@@ -3,8 +3,7 @@ import {
   Text,
   View,
   FlatList,
-  Button,
-  TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -37,13 +36,18 @@ const EditList = ({ route }: any) => {
     navigation.navigate("Home", {});
   }
   return (
-    <View className="flex-1">
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={110}
+      className="flex-1"
+    >
       <View className="border-b-2 border-green-400">
         <Text
+          className="text-gray-600"
           style={{
             fontSize: 20,
             textAlign: "center",
-            paddingBottom: 10,
+            paddingBottom: 6,
             backgroundColor: "white",
             fontWeight: "bold",
           }}
@@ -53,6 +57,7 @@ const EditList = ({ route }: any) => {
       </View>
       <View style={styles.ItemListHeading}>
         <Text
+          className="text-gray-600"
           style={{
             fontSize: 18,
             fontWeight: "bold",
@@ -61,12 +66,13 @@ const EditList = ({ route }: any) => {
           Item Name
         </Text>
         <Text
+          className="text-gray-600"
           style={{
             fontSize: 18,
             fontWeight: "bold",
           }}
         >
-          Expires in
+          Expires in (days)
         </Text>
       </View>
       <FlatList
@@ -92,7 +98,7 @@ const EditList = ({ route }: any) => {
         }}
         ListFooterComponent={<View style={{ height: 20 }} />}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
   ItemListHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 15,
     borderBottomColor: "#ccc",
     backgroundColor: "white",

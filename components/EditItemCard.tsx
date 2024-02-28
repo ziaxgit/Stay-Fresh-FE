@@ -187,9 +187,9 @@ const ItemCard = (props: editListProps) => {
         <View className="flex-row gap-1 items-center ">
           <TouchableOpacity onPress={handleItemUsage}>
             <AntDesign name="delete" size={30} color="red" />
-            {/* <MaterialIcons name="delete-forever" size={35} color="red" /> */}
+            {/* <MaterialIcons name="delete-forever" size={33} color="red" /> */}
           </TouchableOpacity>
-          <Text className="text-xl font-medium">{item_name}</Text>
+          <Text className="text-lg font-medium ">{item_name}</Text>
         </View>
 
         <View className="flex-row gap-1 items-center ">
@@ -210,7 +210,7 @@ const ItemCard = (props: editListProps) => {
             onEndEditing={(event) => {
               handleTypedDays(event);
             }}
-            keyboardType="numeric"
+            inputMode="numeric"
             readOnly={false}
             returnKeyType="done"
           />
@@ -225,11 +225,17 @@ const ItemCard = (props: editListProps) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        {hasBeenChanged ? (
-          <Button title="Save Changes" onPress={handleSave} />
-        ) : null}
-      </View>
+      {hasBeenChanged ? (
+        <TouchableOpacity
+          onPress={handleSave}
+          className="p-2 bg-zinc-700 mx-32 rounded-full"
+        >
+          <Text className="text-white text-center font-medium">
+            {" "}
+            Save Changes{" "}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
       {isError ? <Text>{error}</Text> : null}
     </View>
   );

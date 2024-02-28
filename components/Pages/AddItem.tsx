@@ -31,57 +31,62 @@ const AddItem = () => {
     const currentDate = new Date();
     const itemToAdd = {
       item_name: itemName,
-      item_price: 199,
+      item_price: itemPrice,
       purchase_date: currentDate.toString(),
       expiry_date: expiryDate.toString(),
       home_id: 1,
     };
-    postItemByHomeId(itemToAdd)
-      .then(({ data }) => {
-        Alert.alert("Item successfuly added", undefined, [
-          {
-            text: "Add Another Item",
-            onPress: () => {
-              setItemName("");
-              setItemPrice("");
-              setExpiryDate(new Date());
+
+    if (itemToAdd.item_name === "" || itemToAdd.item_price === "") {
+      alert("Missing fields found. Please fill in all fields.");
+    } else {
+      postItemByHomeId(itemToAdd)
+        .then(({ data }) => {
+          Alert.alert("Item successfuly added", undefined, [
+            {
+              text: "Add Another Item",
+              onPress: () => {
+                setItemName("");
+                setItemPrice("");
+                setExpiryDate(new Date());
+              },
             },
-          },
-          {
-            text: "Finished",
-            onPress: () => {
-              navigation.navigate("Home", {
-                itemToAdd,
-              });
+            {
+              text: "Finished",
+              onPress: () => {
+                navigation.navigate("Home", {
+                  itemToAdd,
+                });
+              },
             },
-          },
-        ]);
-        setIsError(false);
-        return data;
-      })
-      .catch((err) => {
-        setIsError(true);
-        setError(err.response.data.msg);
-      });
-    setAlertShown(true);
+          ]);
+          setIsError(false);
+          return data;
+        })
+        .catch((err) => {
+          setIsError(true);
+          setError(err.response.data.msg);
+        });
+      setAlertShown(true);
+    }
   };
 
   return (
-    <ScrollView className="px-4">
+    <ScrollView className="px-4 mb-2">
       <Text className="text-2xl text-center m-2 mb-4 font-semibold">
         Add new item
       </Text>
       <View className="bg-green-400 p-4 rounded-2xl shadow-md">
         <Text className="text-xl mb-1 font-medium">Item name</Text>
         <TextInput
-          className="py-3 px-2 bg-slate-100 rounded-md mb-4 "
+          className="py-3 px-2 bg-slate-100 rounded-md mb-2 "
           onChangeText={setItemName}
           value={itemName}
           placeholder="Enter item name"
         />
         <Text className="text-xl mb-1 font-medium">Item price</Text>
         <TextInput
-          className="py-3 px-2 bg-slate-100 rounded-md mb-4 "
+          className="py-3 px-2 bg-slate-100 rounded-md mb-2 "
           onChangeText={setItemPrice}
           value={itemPrice}
           placeholder="Enter price in pence"
@@ -100,25 +105,14 @@ const AddItem = () => {
         </View>
       </View>
       {isError ? <Text>{error}, please try again</Text> : null}
-      <View className="flex-row justify-center">
-        <TouchableOpacity
-          className="w-2/6 mt-8 items-center overflow-hidden "
-          onPress={addToList}
-        >
-          <Text
-            style={{
-              borderRadius: 20,
-              padding: 10,
-              overflow: "hidden",
-              backgroundColor: "#38a169",
-              color: "white",
-              fontSize: 20,
-            }}
-          >
-            Add Item
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="mt-2 bg-green-700 rounded-full "
+        onPress={addToList}
+      >
+        <Text className="text-white text-lg text-center py-2 font-medium">
+          Add Item
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
