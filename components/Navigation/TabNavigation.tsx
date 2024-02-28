@@ -19,12 +19,6 @@ export default function TabNavigation() {
         headerShown: false,
         tabBarStyle: {},
         tabBarActiveTintColor: "#15bb53",
-        tabBarStyle: {
-          // backgroundColor: "#7d7d7d",
-          // borderTopLeftRadius: 30,
-          // borderTopRightRadius: 30,
-          paddingBottom: 20,
-        },
       }}
     >
       <Tab.Screen
@@ -32,7 +26,12 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" color={color} size={30} />
+            <Ionicons
+              name="home"
+              style={{ marginTop: 5 }}
+              color={color}
+              size={30}
+            />
           ),
           unmountOnBlur: true, //resets stack
         }}
@@ -43,7 +42,12 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Scan",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="document-scanner" color={color} size={35} />
+            <MaterialIcons
+              name="document-scanner"
+              style={{ marginTop: 5 }}
+              color={color}
+              size={35}
+            />
           ),
           unmountOnBlur: true,
         }}
@@ -54,7 +58,12 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Recipes",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="food-bank" color={color} size={40} />
+            <MaterialIcons
+              name="food-bank"
+              style={{ marginTop: 2 }}
+              color={color}
+              size={40}
+            />
           ),
           unmountOnBlur: true,
         }}
@@ -65,7 +74,12 @@ export default function TabNavigation() {
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="user" color={color} size={35} />
+            <FontAwesome
+              name="user"
+              style={{ marginTop: 5 }}
+              color={color}
+              size={35}
+            />
           ),
           unmountOnBlur: true, //resets stack
         }}

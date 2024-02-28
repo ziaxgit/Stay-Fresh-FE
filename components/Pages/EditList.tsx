@@ -4,6 +4,7 @@ import {
   View,
   FlatList,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -37,7 +38,7 @@ const EditList = ({ route }: any) => {
   }
   return (
     <KeyboardAvoidingView
-      behavior="padding"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={110}
       className="flex-1"
     >
