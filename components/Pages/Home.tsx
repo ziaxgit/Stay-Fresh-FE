@@ -33,7 +33,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 const Home = ({ route }: any) => {
   const isFocused = useIsFocused();
   const itemToAdd = route.params?.itemToAdd;
-  const [currentList, setCurrentList] = useState([]);
+  const [currentList, setCurrentList] = useState<
+    {
+      name: string;
+      expiryDate: number;
+    }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);

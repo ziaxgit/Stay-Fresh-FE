@@ -7,6 +7,8 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
+  Button,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarChart, PieChart } from "react-native-gifted-charts";
@@ -178,7 +180,7 @@ const Profile = () => {
   return (
     <View className="flex-1 items-center bg-gray-100">
       <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center mb-5">
-        <Text className="text-3xl mb-4 font-bold text-800">PROFILE</Text>
+        <Text className="text-xl mb-4 font-bold ">Profile</Text>
         <View className="flex-row">
           <Image
             className="rounded-full w-24 h-24 mb-4 mx-5"
@@ -207,10 +209,13 @@ const Profile = () => {
             </Text>
           </View>
         </View>
+        <TouchableOpacity className="rounded-full bg-green-600 px-3 py-2 mb-4 ">
+          <Text className="text-lg text-white font-medium ">Sign Out</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView>
         <View className="bg-white rounded-lg shadow-lg p-6 mb-6 w-full max-w-md">
-          <Text className="text-2xl mb-3 font-bold  text-center">Insights</Text>
+          <Text className="text-xl font-bold  text-center">Insights</Text>
           <View className="flex-row justify-between mb-6">
             {pieData[0].value > 0 ? (
               <PieChart
@@ -221,14 +226,13 @@ const Profile = () => {
                 innerRadius={50}
                 radius={60}
                 centerLabelComponent={() => (
-                  <Text className="text-center">
-                    <Text className="font-semibold text-gray-700">
-                      Monthly spend:
-                    </Text>
+                  <View className="items-center justify-center">
+                    <Text className="font-semibold text-gray-700">Monthly</Text>
+                    <Text className="font-semibold text-gray-700">spend</Text>
                     <Text className="font-semibold text-gray-900 ">
                       £{(totalSaved + totalLost).toFixed(2)}
                     </Text>
-                  </Text>
+                  </View>
                 )}
               />
             ) : (
@@ -262,11 +266,14 @@ const Profile = () => {
             barBorderRadius={4}
             frontColor="black"
             data={barData}
+            height={150}
             yAxisThickness={0}
             xAxisThickness={1}
             isAnimated
             delay={500}
-            renderTooltip={(item: string, index: number) => {
+            
+            renderTooltip={(item: any, index: any) => {
+
               return (
                 <View
                   style={{
