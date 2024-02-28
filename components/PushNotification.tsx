@@ -1,4 +1,4 @@
-import { Text } from "react-native-svg";
+/* import { Text } from "react-native-svg";
 import { postNotification } from "./Utils/apiCalls";
 import { useEffect, useState } from "react";
 type ItemProp = { item_name: string; expiryDate: number; purchaseDate: number };
@@ -34,3 +34,4 @@ const PushNotification = (props: ListProps) => {
 };
 
 export default PushNotification;
+ */

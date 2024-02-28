@@ -63,7 +63,6 @@ export const getRecipes = (ingreds: string) => {
       return response.data;
     });
 };
-<<<<<<< HEAD
 
 export const postNotification = () => {
   const body = {
@@ -79,5 +78,3 @@ export const postNotification = () => {
       return response;
     });
 };
-=======
->>>>>>> d27dfc1a2f0a01a991fc4acd6fa9a6e105038f6a
