@@ -63,18 +63,3 @@ export const getRecipes = (ingreds: string) => {
       return response.data;
     });
 };
-
-export const postNotification = () => {
-  const body = {
-    appId: 19886,
-    appToken: "XyPpv0RDBMlSVdjdRZ2Lz8",
-    title: `StayFresh: Items Expiring Soon`,
-    body: `Please check your list you have items expiring soon`,
-    dateSent: Date.now(),
-  };
-  return axios
-    .post(`https://app.nativenotify.com/api/notification`, body)
-    .then((response) => {
-      return response;
-    });
-};

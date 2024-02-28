@@ -19,12 +19,12 @@ const EditList = ({ route }: any) => {
   const [visibleList, setVisibleList] = useState(currentList);
 
   function handleExpiryDateChange(index: number, newExpiryDate: number) {
-    const stupidList = [...visibleList];
-    stupidList[index] = {
+    const copyVisibleList = [...visibleList];
+    copyVisibleList[index] = {
       name: visibleList[index].name,
       expiryDate: newExpiryDate,
     };
-    setVisibleList(stupidList);
+    setVisibleList(copyVisibleList);
   }
   function removeItem(index: number) {
     setVisibleList((currentItems: object[]) => {
