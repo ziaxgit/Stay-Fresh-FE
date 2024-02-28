@@ -5,14 +5,20 @@ import {
   Image,
   ImageBackground,
   Dimensions,
-  ScrollView,
+  ScrollView,FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { getRecipes } from "./Utils/apiCalls";
+import RecipeCard from "./RecipeCard";
 
 type RecipeProp = { recipeItems: { item_id: number; item_name: string }[] };
 
 export default function RecipeList({ recipeItems }: RecipeProp) {
+
+
+    const [recipeList, setRecipeList] = useState([]);
+
+
   let ingreds = "";
   for (let i = 0; i < recipeItems.length; i++) {
     ingreds += recipeItems[i].item_name + " ";
@@ -20,16 +26,24 @@ export default function RecipeList({ recipeItems }: RecipeProp) {
   useEffect(() => {
     getRecipes(ingreds)
       .then((result) => {
-        console.log("here");
-        console.log(result);
+        setRecipeList(result.hits);
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  },[]);
+  
   return (
     <View>
-      <Text>{recipeItems[0].item_name}</Text>
+      <Text>Recipe List</Text>
+      <FlatList
+        className="bg-green-400 rounded-b-lg py-2"
+        data={recipeList}
+        renderItem={({ item }) => {
+          return <RecipeCard recipe={item.recipe} />;
+        }}
+        ListFooterComponent={<View style={{ height: 10 }} />}
+      />
     </View>
   );
 }
