@@ -16,12 +16,14 @@ const ItemCard = ({ item_name, expiryDate, purchaseDate }: ItemProp) => {
 
   if (numDaysRemaining <= 2 || percentageShelfLifeRemaining <= 0.05)
     return (
-      <View className="flex-row justify-between items-center px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-1">
-        <Text className="text-lg font-medium text-white">{item_name}</Text>
-        <Text className="text-lg font-medium text-white">
-          {numDaysRemaining} days
-        </Text>
-      </View>
+      <>
+        <View className="flex-row justify-between items-center px-4 py-2 bg-red-700 rounded-2xl shadow-md mx-2 my-1">
+          <Text className="text-lg font-medium text-white">{item_name}</Text>
+          <Text className="text-lg font-medium text-white">
+            {numDaysRemaining} days
+          </Text>
+        </View>
+      </>
     );
   else if (
     (0.05 < percentageShelfLifeRemaining &&
