@@ -19,46 +19,35 @@ export default function RecipesSelector() {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
   const [recipeItems, setRecipeItems] = useState([]);
-  console.log("inside recipe selector");
   useEffect(() => {
-    console.log("inside recipe selector - useEffect");
-    //if (isFocused) {
     getAllItemsByHomeId("active")
       .then(({ data }) => {
-        //console.log("we have gotten all items here");
-        //setIsLoading(false);
         setCurrentList(data.items);
-        setIsLoading(false);
       })
-      // .then((data) => {
-      //   ;
-      // })
       .catch((err) => {
         setIsError(true);
         setError(err.response.data.msg);
         setIsLoading(false);
       });
-    //}
   }, []);
 
-  if (currentList.length > 0) {
-    useEffect(() => {
+  useEffect(() => {
+    if (currentList.length > 0) {
       setRecipeItems([currentList[0], currentList[1], currentList[2]]);
-    }, []);
-  }
+      setIsLoading(false);
+    }
+  }, [currentList]);
 
-  if (isLoading)
-    return (
-      <View>
+  return (
+    <View>
+      <Text>This is the recipe selector</Text>
+      {isLoading ? (
         <Text>Loading</Text>
-      </View>
-    );
-  else
-    return (
-      <View>
-        <Text>This is recipe selector</Text>
-
-        <RecipeList recipeItems={recipeItems} />
-      </View>
-    );
+      ) : (
+        <View>
+          <RecipeList recipeItems={recipeItems} />
+        </View>
+      )}
+    </View>
+  );
 }
