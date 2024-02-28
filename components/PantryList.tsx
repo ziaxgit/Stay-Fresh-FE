@@ -28,7 +28,7 @@ const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
         }}
         ListFooterComponent={<View style={{ height: 10 }} />}
       />
-      {/*  <PushNotification currentList={props.currentList} /> */}
+      <PushNotification currentList={props.currentList} />
     </>
   );
 };
