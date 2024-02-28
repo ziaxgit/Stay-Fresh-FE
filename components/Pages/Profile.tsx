@@ -17,6 +17,9 @@ import {
   getHomeName,
   getAllItemsByHomeId,
 } from "../Utils/apiCalls";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+
 const Profile = () => {
   const [userName, setUserName] = useState("");
   const [homeName, setHomeName] = useState("");
@@ -177,6 +180,11 @@ const Profile = () => {
     setPieData(Pie);
   }, [items]);
 
+  const handleSignOut = async () => {
+    await signOut(auth);
+    return <ActivityIndicator />;
+  };
+
   return (
     <View className="flex-1 items-center bg-gray-100">
       <View className="bg-white rounded-lg pt-3 shadow-lg py--1 px-20 flex-col items-center mb-5">
@@ -209,7 +217,10 @@ const Profile = () => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity className="rounded-full bg-green-600 px-3 py-2 mb-4 ">
+        <TouchableOpacity
+          className="rounded-full bg-green-600 px-3 py-2 mb-4"
+          onPress={handleSignOut}
+        >
           <Text className="text-lg text-white font-medium ">Sign Out</Text>
         </TouchableOpacity>
       </View>
@@ -271,9 +282,7 @@ const Profile = () => {
             xAxisThickness={1}
             isAnimated
             delay={500}
-            
             renderTooltip={(item: any, index: any) => {
-
               return (
                 <View
                   style={{
