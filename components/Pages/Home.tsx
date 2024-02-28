@@ -16,7 +16,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { getAllItemsByHomeId } from "../Utils/apiCalls";
 export type RootStackParamList = {
-  Home: { itemToAdd?: {} };
+  Home: { itemToAdd?: {} } | undefined;
   AddItem: undefined;
   SignUp: undefined;
   LogIn: undefined;

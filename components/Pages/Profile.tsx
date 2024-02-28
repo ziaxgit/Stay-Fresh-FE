@@ -266,7 +266,7 @@ const Profile = () => {
             xAxisThickness={1}
             isAnimated
             delay={500}
-            renderTooltip={(item, index) => {
+            renderTooltip={(item: string, index: number) => {
               return (
                 <View
                   style={{

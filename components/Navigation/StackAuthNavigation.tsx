@@ -4,26 +4,20 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddItem from "../Pages/AddItem";
 import EditList from "../Pages/EditList";
 import LogIn from "../Pages/LogIn";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+
 import SignUp from "../Pages/SignUp";
 import useAuth from "./hooks/useAuth";
-
-
-
 const Stack = createNativeStackNavigator();
 
-
-export default function HomeNavigation() {
+export default function StackAuthNavigation() {
   return (
     <Stack.Navigator
-      // initialRouteName="LogIn"
+      initialRouteName="LogIn"
       screenOptions={{ headerShown: false }}
     >
-      {/* <Stack.Screen name="LogIn" component={LogIn} /> */}
-      <Stack.Screen name="Home" component={Home} />
-      {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-
-      <Stack.Screen name="AddItem" component={AddItem} />
-      <Stack.Screen name="EditList" component={EditList} />
+      <Stack.Screen name="LogIn" component={LogIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
   );
 }
