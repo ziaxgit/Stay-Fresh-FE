@@ -234,7 +234,7 @@ const Profile = () => {
             ) : (
               <View className="items-center gap-2">
                 <ActivityIndicator size={"large"} color={"red"} />
-                <Text className="text-lg">Loading chartW...</Text>
+                <Text className="text-lg">Loading chart...</Text>
               </View>
             )}
 
