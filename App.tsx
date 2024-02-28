@@ -3,8 +3,10 @@ import Header from "./components/Header";
 import React from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import TabNavigation from "./components/Navigation/TabNavigation";
+import registerNNPushToken from "native-notify";
 
 export default function App() {
+  registerNNPushToken(19886, "XyPpv0RDBMlSVdjdRZ2Lz8");
   return (
     <NavigationContainer>
       <SafeAreaView>
