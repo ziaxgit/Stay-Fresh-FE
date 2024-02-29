@@ -9,6 +9,7 @@ import {
   Linking,
   Button,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { getRecipes } from "./Utils/apiCalls";
@@ -58,7 +59,19 @@ export default function RecipeCard({ recipe }: RecipeProp) {
           uri: recipe.images.REGULAR.url,
         }}
       />
-      <Button title={"Open Recipe"} onPress={handlePress} />
+
+      <View className="content-center py-5 ">
+        <TouchableOpacity
+          className="rounded-full bg-green-600  px-20 mx-2"
+          onPress={handlePress}
+        >
+          <Text className="text-lg text-white font-medium text-center">
+            {"Go To Recipe"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* <Button title={"Open Recipe"} onPress={handlePress} /> */}
     </View>
   );
 }
