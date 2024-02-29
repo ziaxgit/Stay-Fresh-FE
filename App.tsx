@@ -6,6 +6,11 @@ import TabNavigation from "./components/Navigation/TabNavigation";
 import registerNNPushToken from "native-notify";
 import useAuth from "./components/Navigation/hooks/useAuth";
 import StackAuthNavigation from "./components/Navigation/StackAuthNavigation";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 
 export default function App() {
   registerNNPushToken(19886, "XyPpv0RDBMlSVdjdRZ2Lz8");
@@ -25,7 +30,7 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <SafeAreaView >
+        <SafeAreaView>
           <Header />
         </SafeAreaView>
         <TabNavigation />
