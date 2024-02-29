@@ -20,6 +20,7 @@ export type RootStackParamList = {
   AddItem: undefined;
   SignUp: undefined;
   LogIn: undefined;
+  ForgotPassword: undefined;
   EditList: {
     currentList: { name: string; expiryDate: number }[];
     setCurrentList: (

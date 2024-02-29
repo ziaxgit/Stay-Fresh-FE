@@ -1,10 +1,7 @@
-import Home from "../Pages/Home";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AddItem from "../Pages/AddItem";
-import EditList from "../Pages/EditList";
 import LogIn from "../Pages/LogIn";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import ForgotPassword from "../Pages/ForgotPassword";
 
 import SignUp from "../Pages/SignUp";
 import useAuth from "./hooks/useAuth";
@@ -18,6 +15,7 @@ export default function StackAuthNavigation() {
     >
       <Stack.Screen name="LogIn" component={LogIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
     </Stack.Navigator>
   );
 }

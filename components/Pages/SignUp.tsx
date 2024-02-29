@@ -32,22 +32,17 @@ const SignUp = () => {
   };
 
   return (
-    <View className="bg-white ">
+    <View className="bg-white h-full ">
+      <Text className="text-3xl mb-5 text-center font-semibold mt-10">
+        Register
+      </Text>
       <View
-        className="px-14 pt-8 mt-8 bg-green-500"
-        style={{
-          borderTopRightRadius: 40,
-          borderTopLeftRadius: 40,
-          height: 800,
-        }}
+        className="px-10 pt-4 mt- bg-green-500 mx-6 pb-8"
+        style={{ borderRadius: 40 }}
       >
-        <Text className="text-3xl mb-5 text-center font-semibold">
-          Register
-        </Text>
-
         <View>
-          <View className="flex-row justify-between w-full ">
-            <View className="w-32">
+          <View className="flex-row justify-between w-full mt-2">
+            <View style={{ width: "48%" }}>
               <Text className="ml-2 text-base mb-1 mt- ">First Name</Text>
               <TextInput
                 value={firstName}
@@ -57,7 +52,7 @@ const SignUp = () => {
                 mt-3
               />
             </View>
-            <View className="w-32">
+            <View style={{ width: "48%" }}>
               <Text className="ml-2 text-base mb-1 mt- ">Last Name</Text>
               <TextInput
                 value={lastName}
@@ -92,23 +87,7 @@ const SignUp = () => {
         >
           <Text className="text-center text-lg text-white">Sign Up</Text>
         </TouchableOpacity>
-        <Text className="text-center text-gray-200 font-bold mt-2">OR</Text>
-        <TouchableOpacity className="bg-gray-200 rounded-full p-2 mt-2">
-          <View className="flex-row justify-center items-center">
-            <Text className="text-center text-lg text-black">
-              Sign up using
-            </Text>
-            <Image
-              source={require("../../assets/google-logo.png")}
-              style={{
-                width: 70,
-                height: 20,
-                resizeMode: "contain",
-                marginTop: 5,
-              }}
-            />
-          </View>
-        </TouchableOpacity>
+
         <View className="flex-row items-center justify-center mt-4">
           <Text className="font-light">Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.goBack()}>
