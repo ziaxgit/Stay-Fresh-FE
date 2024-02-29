@@ -12,37 +12,57 @@ import { CheckBox } from "react-native-elements";
 import { useState } from "react";
 
 interface IngredientSelectProps {
-  // currentList: [];
-  // setCurrentList: (arg: object[]) => void;
   itemId: number;
   itemName: string;
   checkedItems: object[];
   setCheckedItems: (arg) => void;
-  // expiry_date: number;
-  // item: { item_name: string; expiry_date: number; item_id: number };
-  // onExpiryDateChange: (arg: number) => void;
 }
 
 const IngredientSelectorCard = (props: IngredientSelectProps) => {
   const setCheckedItems = props.setCheckedItems;
   const [isChecked, setIsChecked] = useState(false);
+
   function handleChecked() {
     setIsChecked(!isChecked);
-    if (!isChecked)
+
+    if (!isChecked){
       setCheckedItems((checkedItems) => {
-        console.log(checkedItems, "<----");
         const newCheckedItems = [
           ...checkedItems,
           { item_id: props.itemId, item_name: props.itemName },
         ];
         return newCheckedItems;
-      });
+      })}
+
+       if (isChecked) {
+         setCheckedItems((checkedItems) => {
+
+          console.log("checked items if is checked>> ",checkedItems)
+           const currentCheckedItems = [
+             ...checkedItems];
+
+             const newCheckedItems = []
+
+             for (let i = 0; i < currentCheckedItems.length; i++){
+              if (currentCheckedItems[i].item_id !== props.itemId) {
+                newCheckedItems.push(currentCheckedItems[i]);
+              }
+             }
+
+
+           return newCheckedItems;
+         });
+       }
+
+
+
+
   }
+
   return (
     <View>
-      <Text>{props.itemName}</Text>
       <CheckBox
-        title="Select Item"
+        title={props.itemName}
         checked={isChecked}
         onPress={handleChecked}
       />
