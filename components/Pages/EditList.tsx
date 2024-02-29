@@ -78,7 +78,7 @@ const EditList = ({ route }: any) => {
       </View>
       <FlatList
         scrollEnabled={true}
-        className="pt-2 bg-green-400 pb-2 rounded-b-xl"
+        className="pt-2 pb-2 rounded-b-xl"
         data={visibleList}
         renderItem={({ item, index }) => {
           return (

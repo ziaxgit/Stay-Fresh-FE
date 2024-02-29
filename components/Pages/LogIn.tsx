@@ -34,7 +34,7 @@ const LogIn = () => {
   return (
     <View className="bg-white h-full">
       <View className="w-full mt-8 px-10">
-        <View className="flex-row justify-evenly items-center">
+        <View className="flex-row justify-evenly items-center mt-2">
           <Image
             source={require("../../assets/qr-code.png")}
             style={{ width: 60, height: 60, resizeMode: "contain" }}
@@ -63,7 +63,7 @@ const LogIn = () => {
       </View>
 
       <View
-        className="mx-6 px-10 pt-8 mt-8 mb-4 bg-green-500 "
+        className="mx-6 px-10 pt-8 mt-6 mb-4 bg-green-500 "
         style={{ borderRadius: 40 }}
       >
         <View>

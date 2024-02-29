@@ -60,9 +60,9 @@ export default function RecipeCard({ recipe }: RecipeProp) {
         }}
       />
 
-      <View className="content-center py-5 ">
+      <View className="content-center py-5 px-16">
         <TouchableOpacity
-          className="rounded-full bg-green-600  px-20 mx-2"
+          className="rounded-full bg-green-600 mx-2"
           onPress={handlePress}
         >
           <Text className="text-lg text-white font-medium text-center">

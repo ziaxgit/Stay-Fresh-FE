@@ -274,7 +274,7 @@ export default function Scan() {
                 onPress={analyseImage}
                 className="flex-row justify-center"
               >
-                <View className="bg-green-700 p-3 rounded-full">
+                <View className="bg-green-600 p-3 rounded-full">
                   <Text className="text-white text-base font-medium">
                     Analyse Receipt
                   </Text>
@@ -346,7 +346,7 @@ export default function Scan() {
             className="text-xl mx-8 font-medium text-gray-700"
           >
             Seamlessly scan your receipts using latest Google Cloud Vision and
-            OpenAI GPT-4 technology
+            OpenAI GPT-4 technology ✨
           </Text>
         )}
       </ScrollView>

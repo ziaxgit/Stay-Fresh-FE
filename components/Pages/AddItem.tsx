@@ -73,28 +73,28 @@ const AddItem = () => {
 
   return (
     <ScrollView className="px-4 mb-2">
-      <Text className="text-2xl text-center m-2 mb-4 font-semibold">
+      <Text className="text-2xl text-center m-2 mt-4 font-semibold">
         Add new item
       </Text>
-      <View className="bg-green-400 p-4 rounded-2xl shadow-md">
-        <Text className="text-xl mb-1 font-medium">Item name</Text>
+      <View className="p-4 rounded-2xl shadow-md">
+        <Text className="text-lg mb-1 font-medium ml-2">Item name</Text>
         <TextInput
-          className="py-3 px-2 bg-slate-100 rounded-md mb-2 "
+          className="py-3 px-3 bg-slate-100 rounded-lg mb-2"
           onChangeText={setItemName}
           value={itemName}
           placeholder="Enter item name"
         />
-        <Text className="text-xl mb-1 font-medium">Item price</Text>
+        <Text className="text-lg mb-1 font-medium ml-2">Item price</Text>
         <TextInput
-          className="py-3 px-2 bg-slate-100 rounded-md mb-2 "
+          className="py-3 px-3 bg-slate-100 rounded-lg mb-2"
           onChangeText={setItemPrice}
           value={itemPrice}
           placeholder="Enter price in pence"
           inputMode="numeric"
           returnKeyType="done"
         />
-        <Text className="text-xl mb-1 font-medium">Expiry date</Text>
-        <View className="flex flex-row items-start bg-slate-100 rounded-md">
+        <Text className="text-lg mb-1 font-medium ml-2">Expiry date</Text>
+        <View className="flex flex-row items-start bg-slate-100 rounded-xl">
           <DateTimePicker
             testID="dateTimePicker"
             value={expiryDate}
@@ -106,7 +106,7 @@ const AddItem = () => {
       </View>
       {isError ? <Text>{error}, please try again</Text> : null}
       <TouchableOpacity
-        className="mt-2 bg-green-700 rounded-full "
+        className="mt-2 bg-green-600 rounded-full"
         onPress={addToList}
       >
         <Text className="text-white text-lg text-center py-2 font-medium">

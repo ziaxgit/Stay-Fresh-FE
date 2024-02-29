@@ -22,12 +22,14 @@ const SignUp = () => {
   const [lastName, setLastName] = React.useState("");
 
   const handleSignUp = async () => {
-    if (email && password) {
+    if (email && password && firstName && lastName) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
       } catch (err) {
         alert(err);
       }
+    } else {
+      alert("Please fill in all the fields");
     }
   };
 
@@ -37,7 +39,7 @@ const SignUp = () => {
         Register
       </Text>
       <View
-        className="px-10 pt-4 mt- bg-green-500 mx-6 pb-8"
+        className="px-10 pt-4 bg-green-500 mx-6 pb-8"
         style={{ borderRadius: 40 }}
       >
         <View>

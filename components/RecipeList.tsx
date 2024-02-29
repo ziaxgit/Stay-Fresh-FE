@@ -59,7 +59,7 @@ export default function RecipeList({ recipeItems }: RecipeProp) {
     );
   return (
     <View className="flex-1">
-      <View className="gap-1 px-4 items-center">
+      <View className="gap-1 px-4 items-center -mt-3">
         <Text className="text-lg">Recipe suggestions based on</Text>
         <Text className="text-lg font-medium text-green-700 ">
           {displayIngreds.join(", ")}
