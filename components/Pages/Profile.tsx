@@ -194,7 +194,10 @@ const Profile = () => {
   };
 
   return (
-    <ScrollView className="flex-1 items- bg-gray-100 mx-2">
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      className="flex-1 items- bg-gray-100 mx-2"
+    >
       <View className="bg-white rounded-lg pt-3 shadow-lg items-center mb-2 mt-2">
         {/* <Text className="text-xl mb-4 font-bold ">Profile</Text> */}
         <View className="flex-row">
@@ -287,7 +290,7 @@ const Profile = () => {
               noOfSections={3}
               frontColor="black"
               data={barData}
-              height={200}
+              height={150}
               yAxisThickness={1}
               xAxisThickness={1}
               isAnimated
