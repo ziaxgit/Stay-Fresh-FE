@@ -8,6 +8,8 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
+    TouchableOpacity,
+
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import RecipeList from "../RecipeList";
@@ -22,6 +24,9 @@ export default function RecipesSelector() {
   const [error, setError] = useState(null);
   const [recipeItems, setRecipeItems] = useState([]);
   const [selectIngredients, setSelectIngredients] = useState(false);
+  const [ingredientChecked, setIngredientChecked] = useState(false);
+
+
   useEffect(() => {
     getAllItemsByHomeId("active")
       .then(({ data }) => {
@@ -49,10 +54,19 @@ export default function RecipesSelector() {
         <ActivityIndicator size={30} />
       ) : (
         <View className="flex-1 bg-gray-50">
-          <Button
-            title={selectIngredients ? "View Recipes" : "Select Ingredients"}
-            onPress={handleSelectIngredients}
-          />
+          {!ingredientChecked ? (
+            <View className="content-center py-5">
+              <TouchableOpacity
+                className="rounded-full bg-green-600  px-20 mx-2"
+                onPress={handleSelectIngredients}
+              >
+                <Text className="text-lg text-white font-medium text-center">
+                  {selectIngredients ? "View Recipes" : "Select Ingredients"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+
           {!selectIngredients ? (
             <RecipeList recipeItems={recipeItems} />
           ) : (
@@ -60,6 +74,7 @@ export default function RecipesSelector() {
               currentList={currentList}
               setRecipeItems={setRecipeItems}
               setSelectIngredients={setSelectIngredients}
+              setIngredientChecked={setIngredientChecked}
             />
           )}
         </View>

@@ -50,6 +50,7 @@ export const patchItemById = (item_id: number, updatedItem: object) => {
 };
 
 export const getRecipes = (ingreds: string) => {
+  console.log("calling the recipe api")
   return axios
     .get("https://api.edamam.com/api/recipes/v2", {
       params: {

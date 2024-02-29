@@ -33,9 +33,6 @@ export default function RecipeList({ recipeItems }: RecipeProp) {
   }
 
   useEffect(() => {
-    console.log("====================================");
-    console.log("running useEffect");
-    console.log("====================================");
     getRecipes(ingreds)
       .then((result) => {
         setRecipeList(result.hits);
