@@ -44,9 +44,7 @@ const PushNotification = (props: ListProps) => {
         minute: 0,
         repeats: true,
       },
-    }).then((result) => {
-      console.log(result);
-    });
+    }).then((result) => {});
   }, [notify]);
 
   return null;

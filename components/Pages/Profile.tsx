@@ -28,7 +28,11 @@ const Profile = () => {
     { value: 0, label: "Sun", frontColor: "#3BB566" },
     { value: 0, label: "Mon", frontColor: "#3BB566" },
     { value: 0, label: "Tue", frontColor: "#3BB566" },
-    { value: 0, label: "Wed", frontColor: "#3BB566" },
+    {
+      value: 0,
+      label: "Wed",
+      frontColor: "#3BB566",
+    },
     { value: 0, label: "Thu", frontColor: "#3BB566" },
     { value: 0, label: "Fri", frontColor: "#3BB566" },
     { value: 0, label: "Sat", frontColor: "#3BB566" },
@@ -124,6 +128,7 @@ const Profile = () => {
 
         if (foundDay) {
           foundDay.value += item.item_price / 100;
+          foundDay.value;
         }
       }
     });
@@ -140,9 +145,10 @@ const Profile = () => {
     );
     const lastDayOfTheMonth = new Date(
       currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
+      currentDate.getMonth() + 2,
       0
     );
+    console.log(lastDayOfTheMonth);
     let totalSaved: number = 0;
     let totalLost: number = 0;
     if (items !== undefined) {
@@ -164,10 +170,14 @@ const Profile = () => {
       });
     }
 
+    const updatedPieData = [
+      { value: totalSaved, color: "#3BB566" },
+      { value: totalLost, color: "#D3D3D3" },
+    ];
+
     setTotalSaved(totalSaved);
     setTotalLost(totalLost);
-    pieData[0].value = totalSaved;
-    pieData[1].value = totalLost;
+    setPieData(updatedPieData);
 
     return pieData;
   };
@@ -175,9 +185,7 @@ const Profile = () => {
   useEffect(() => {
     const newBarData = updateBarData();
     setBarData(newBarData);
-    const Pie = updatePieData();
-
-    setPieData(Pie);
+    updatePieData();
   }, [items]);
 
   const handleSignOut = async () => {
@@ -279,18 +287,17 @@ const Profile = () => {
               noOfSections={3}
               frontColor="black"
               data={barData}
-              height={150}
+              height={200}
               yAxisThickness={1}
               xAxisThickness={1}
               isAnimated
-              delay={500}
               renderTooltip={(item: any, index: any) => {
                 return (
                   <View
                     style={{
-                      marginBottom: 5,
+                      marginBottom: -50,
                       // marginTop: -15,
-                      marginLeft: -4,
+                      marginLeft: 0,
                       backgroundColor: "#D3D3D3",
                       paddingHorizontal: 6,
                       paddingVertical: 4,
