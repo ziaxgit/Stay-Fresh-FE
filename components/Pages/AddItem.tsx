@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   ScrollView,
@@ -13,36 +13,45 @@ import { RootStackParamList } from "./Home";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { postItemByHomeId } from "../Utils/apiCalls";
 
+interface ItemToAdd {
+  item_name: string;
+  item_price: number;
+  purchase_date: string;
+  expiry_date: string;
+  home_id: number;
+}
+
 const AddItem = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemName, setItemName] = useState("");
   const [expiryDate, setExpiryDate] = useState(new Date());
   const [itemPrice, setItemPrice] = useState<string>("");
-  const [alertShown, setAlertShown] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const onChangeDate = (event: any, selectedDate: any) => {
+  const onChangeDate = (_event: any, selectedDate: any) => {
     setExpiryDate(selectedDate);
   };
-
   const addToList = () => {
     const currentDate = new Date();
-    const itemToAdd = {
+
+    const priceInPence = parseFloat(itemPrice) * 100;
+
+    const itemToAdd: ItemToAdd = {
       item_name: itemName,
-      item_price: itemPrice,
+      item_price: priceInPence,
       purchase_date: currentDate.toString(),
       expiry_date: expiryDate.toString(),
       home_id: 1,
     };
-
-    if (itemToAdd.item_name === "" || itemToAdd.item_price === "") {
+    console.log(itemToAdd.item_price);
+    if (itemToAdd.item_name === "" || isNaN(priceInPence)) {
       alert("Missing fields found. Please fill in all fields.");
     } else {
       postItemByHomeId(itemToAdd)
         .then(({ data }) => {
-          Alert.alert("Item successfuly added", undefined, [
+          Alert.alert("Item successfully added", undefined, [
             {
               text: "Add Another Item",
               onPress: () => {
@@ -67,7 +76,6 @@ const AddItem = () => {
           setIsError(true);
           setError(err.response.data.msg);
         });
-      setAlertShown(true);
     }
   };
 
@@ -89,8 +97,8 @@ const AddItem = () => {
           className="py-3 px-3 bg-slate-100 rounded-lg mb-2"
           onChangeText={setItemPrice}
           value={itemPrice}
-          placeholder="Enter price in pence"
-          inputMode="numeric"
+          placeholder="£ Enter price in pounds"
+          keyboardType="decimal-pad"
           returnKeyType="done"
         />
         <Text className="text-lg mb-1 font-medium ml-2">Expiry date</Text>
