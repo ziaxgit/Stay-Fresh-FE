@@ -15,7 +15,7 @@ const PantryList: React.FC<pantryListProps> = (props: pantryListProps) => {
   return (
     <>
       <FlatList
-        className="bg-green-400 rounded-b-lg py-2"
+        className="bg-gray-100 rounded-b-lg py-2"
         data={props.currentList}
         renderItem={({ item }) => {
           return (

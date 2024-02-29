@@ -76,7 +76,7 @@ const Home = ({ route }: any) => {
 
   return (
     <View className="flex-1">
-      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View className="flex-1 bg-white">
         <Text className="font-medium shadow-gray-700 italic text-sm text-center -mt-1 ">
           Your Penny Saving Grocery Companion
         </Text>
@@ -129,7 +129,7 @@ const Home = ({ route }: any) => {
           <PantryList currentList={currentList} />
         )}
       </View>
-      <View className="flex flex-row justify-around my-2">
+      <View className="flex flex-row justify-around my-2 mb-3">
         <TouchableOpacity
           className="rounded-full bg-gray-700 px-3 py-2"
           onPress={() => {

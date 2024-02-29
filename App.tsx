@@ -25,7 +25,7 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <SafeAreaView>
+        <SafeAreaView >
           <Header />
         </SafeAreaView>
         <TabNavigation />

@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Dimensions,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import RecipeList from "../RecipeList";
@@ -43,12 +44,11 @@ export default function RecipesSelector() {
     setSelectIngredients(!selectIngredients);
   }
   return (
-    <View>
-      <Text>This is the recipe selector</Text>
+    <View className="flex-1">
       {isLoading ? (
-        <Text>Loading</Text>
+        <ActivityIndicator size={30} />
       ) : (
-        <View>
+        <View className="flex-1 bg-gray-50">
           <Button
             title={selectIngredients ? "View Recipes" : "Select Ingredients"}
             onPress={handleSelectIngredients}

@@ -9,20 +9,26 @@ import {
   Linking,
   Button,
   Alert,
-
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { getRecipes } from "./Utils/apiCalls";
 
-type RecipeProp = { recipe: {label: string, url: string, images: {THUMBNAIL: {url: string, width: number, height: number}}}};
+type RecipeProp = {
+  recipe: {
+    label: string;
+    url: string;
+    images: { THUMBNAIL: { url: string; width: number; height: number } };
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
   },
   tinyLogo: {
-    width: 100,
-    height: 100,
+    // width: 300,
+    height: 200,
+    resizeMode: "contain",
   },
   logo: {
     width: 66,
@@ -30,8 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default function RecipeCard({recipe}: RecipeProp) {
+export default function RecipeCard({ recipe }: RecipeProp) {
   const handlePress = useCallback(async () => {
     const supported = await Linking.canOpenURL(recipe.url);
 
@@ -43,15 +48,17 @@ export default function RecipeCard({recipe}: RecipeProp) {
   }, [recipe.url]);
 
   return (
-    <View>
-      <Text>{recipe.label}</Text>
-      <Button title={"Open Recipe"} onPress={handlePress} />
+    <View className="m-2 shadow-lg border- px-4 bg-white rounded-2xl border-gray-500">
+      <Text className="text-center text-lg font-medium m-2">
+        {recipe.label}
+      </Text>
       <Image
         style={styles.tinyLogo}
         source={{
-          uri: recipe.images.THUMBNAIL.url,
+          uri: recipe.images.REGULAR.url,
         }}
       />
+      <Button title={"Open Recipe"} onPress={handlePress} />
     </View>
   );
 }
