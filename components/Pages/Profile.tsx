@@ -212,19 +212,19 @@ const Profile = () => {
               <Text className="flex items-center text-lg font-semibold text-gray-700">
                 Username:
               </Text>
-              <Text className="text-lg text-900"> {userName}</Text>
+              <Text className="text-lg text-900"> emran32</Text>
             </Text>
             <Text>
               <Text className="flex items-center text-lg font-semibold text-gray-700">
                 Email:
               </Text>
-              <Text className="text-lg text-900"> smith01@hotmail.com</Text>
+              <Text className="text-lg text-900"> emran32@gmail.com</Text>
             </Text>
             <Text>
               <Text className="flex items-center text-lg font-semibold text-gray-700">
                 Home:
               </Text>
-              <Text className="text-center mt-1 text-lg"> {homeName}</Text>
+              <Text className="text-center mt-1 text-lg"> Emran's Family</Text>
             </Text>
           </View>
         </View>

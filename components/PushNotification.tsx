@@ -10,7 +10,6 @@ type ListProps = {
 };
 const PushNotification = (props: ListProps) => {
   const [notify, setNotify] = useState(false);
-  const [time, setTime] = useState([]);
   props.currentList.map((item) => {
     const formattedPurchaseDate = Date.parse(item.purchase_date.toString());
     const currentDate = Date.now();
@@ -28,8 +27,8 @@ const PushNotification = (props: ListProps) => {
   useEffect(() => {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
+        shouldShowAlert: false,
+        shouldPlaySound: false,
         shouldSetBadge: false,
       }),
     });
@@ -37,12 +36,12 @@ const PushNotification = (props: ListProps) => {
     Notifications.scheduleNotificationAsync({
       content: {
         title: "Stay Fresh",
-        body: "Please check your list you have items expiring soon",
+        body: "Some items are expiring soon. Please check your list.",
       },
       trigger: {
-        hour: 9,
-        minute: 0,
-        repeats: true,
+        // hour: 19,
+        // minute: 57,
+        // repeats: true,
       },
     }).then((result) => {});
   }, [notify]);
